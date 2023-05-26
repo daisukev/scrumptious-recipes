@@ -23,7 +23,7 @@ def recipe_list(request):
 
 def create_recipe(request):
     if request.method == "POST":
-        form = RecipeForm(request.POST)
+        form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
         return redirect(recipe_list)
@@ -37,7 +37,7 @@ def create_recipe(request):
 def edit_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if request.method == "POST":
-        form = RecipeForm(request.POST, instance=recipe)
+        form = RecipeForm(request.POST,request.FILES, instance=recipe)
         if form.is_valid():
             form.save()
         return redirect("show_recipe", id=id)

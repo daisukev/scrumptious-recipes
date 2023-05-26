@@ -14,7 +14,7 @@
           <a href="{% url 'show_recipe' recipe.id %}">{{ recipe.title }}</a>
         </h3>
           <p>{{ recipe.created_on|date:"j F Y" }}</p>
-          <img class="thumbnail" src="{{recipe.picture}}">
+          <img class ="thumbnail" src="{{recipe.picture.url}}" />
         <div>4.3 stars</div>
       </div>
         {% endfor %}

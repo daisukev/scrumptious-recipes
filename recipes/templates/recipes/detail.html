@@ -6,7 +6,7 @@ Scrumptious Recipes - {{ recipe.title }}
 {% block content %}
     <main>
       <h1>{{ recipe.title }}</h1>
-      <img src="{{recipe.picture}}" />
+      <img src="{{recipe.picture.url}}" />
       <div>4.3 stars</div>
       <p>
       {{ recipe.created_on|date:"F j, Y" }}

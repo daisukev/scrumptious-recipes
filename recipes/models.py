@@ -4,7 +4,7 @@ from django.db import models
 
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    picture = models.URLField()
+    picture = models.ImageField(upload_to="images/")
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
