@@ -1,0 +1,7 @@
+
+<h1>Edit {{ recipe_object.title }}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button>Save</button>
+</form>

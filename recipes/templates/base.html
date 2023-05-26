@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
+</head>
+<body>
+  <div class="container">
+  <header>
+    <nav>
+      <div class="nav-list">
+      <a class = 'nav-item' href="{% url 'recipe_list' %}">Main page</a>
+      <a class ='nav-item' href="{% url 'create_recipe' %}">Create a Recipe</a>
+      </div>
+    </nav>
+  </header>
+    {% block content %}{% endblock content %}
+  </div>
+    <footer>
+      Made with love by Scrumptious Recipes
+    </footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+  Scrumptious Recipes - Create Recipe
+{% endblock title %}
+{% block content %}
+  <main>
+  <form enctype= "multipart/form-data" method="post">
+    {% csrf_token %}
+      {{ form.as_p }}
+
+    <button>Save</button>
+  </form>
+  </main>
+{% endblock content %}
+
+
