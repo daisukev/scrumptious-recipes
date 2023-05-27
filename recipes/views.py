@@ -10,8 +10,10 @@ from .forms import RecipeForm
 def show_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     print('recipe: ', recipe.title)
+    # print(vars(recipe))
+    # print(vars(recipe.ratings.all()))
     context = {
-        "recipe": recipe
+        "recipe": recipe,
         }
 
     return render(request, "recipes/detail.html",context)
@@ -21,11 +23,9 @@ def recipe_list(request):
     paginator = Paginator(recipes, 9)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    # context = {
-    #         "recipe_list": recipes,
-    #         }
+    # TODO: Implement the ratings for the list view
     context = {
-            "recipe_list": page_obj 
+            "recipe_list": page_obj,
             }
     return render(request, "recipes/list.html", context)
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Recipe
+from .models import Recipe, Rating
 
 # Register your models here.
 # Version 1
@@ -13,4 +13,9 @@ class RecipeAdmin(admin.ModelAdmin):
             "title",
             "id",
             "description"
+            )
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display=(
+            "value",
             )
