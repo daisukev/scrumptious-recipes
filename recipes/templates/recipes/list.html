@@ -13,11 +13,13 @@ Scrumptious Recipes
     {% for recipe in recipe_list %}
     <div role="button" class="recipe-item" onclick="location.href='{% url 'show_recipe' recipe.id %}'">
       <div class="img-container">
-        <img class="thumbnail" src="{{recipe.picture.url}}" alt="A Picture of {{recipe.title}}"/>
+        <img class="thumbnail" src="{{recipe.thumbnail.url}}" alt="A Picture of {{recipe.title}}"/>
       </div>
-      <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
-      <time>{{ recipe.created_on|date:"j F Y" }}</time>
-      <div>4.3 stars</div>
+      <div class="recipe-item-lower">
+        <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
+        <div>By Michelle Gray</div>
+        <div>4.3 stars</div>
+      </div>
     </div>
     {% endfor %}
   </div>

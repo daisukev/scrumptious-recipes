@@ -18,7 +18,7 @@ def show_recipe(request, id):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    paginator = Paginator(recipes, 2)
+    paginator = Paginator(recipes, 9)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     # context = {
