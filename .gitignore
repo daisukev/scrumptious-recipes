@@ -1,3 +1,47 @@
+# Byte-compiled / optimized Python files
+*.pyc
+__pycache__/
+
+# Django-specific
+*.log
+*.pot
+*.pyc
+local_settings.py
 db.sqlite3
-media
-.venv
+media/
+
+# Static files (usually collected by Django's collectstatic command)
+staticfiles/
+
+# Environment variables file
+.env
+
+# IDE-specific files (e.g., PyCharm, VS Code)
+.idea/
+.vscode/
+
+# Project-specific
+*.secret_key
+*.db
+
+# Ignore migrations if using Django's built-in migrations
+**/migrations/
+
+# Ignore pipenv/virtualenv environment
+/.venv/
+/.env/
+
+# Ignore sensitive or personal files
+*.bak
+*.swp
+*.swo
+*.pyo
+*.orig
+*~
+
+# Ignore generated files and directories
+.DS_Store
+node_modules/
+bower_components/
+dist/
+
