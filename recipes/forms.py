@@ -1,4 +1,3 @@
-from PIL import Image
 from django.forms import ModelForm
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -12,3 +11,4 @@ class RecipeForm(ModelForm):
                 "picture", 
                 "description"
                 )
+        exclude = ['thumbnail']
