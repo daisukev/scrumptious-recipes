@@ -19,6 +19,17 @@
       </div>
         {% endfor %}
     </div>
+    <div class="pagination">
+      {% if recipe_list.has_previous %}
+        <a href="?page=1">first</a>
+        <a href="?page={{ recipe_list.previous_page_number}}">previous</a>
+      {%endif%}
+      <span class="current">Page {{recipe_list.number}} of {{ recipe_list.paginator.num_pages}}</span>
+      {% if recipe_list.has_next %}
+      <a href="?page={{recipe_list.next_page_number}}">next</a>
+      <a href="?page={{recipe_list.paginator.num_pages}}">last</a>
+      {% endif %}
+    </div>
   </main>
 {% endblock content %}
 

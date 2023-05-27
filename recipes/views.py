@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, render, redirect
+from django.views.generic import ListView
+from django.core.paginator import Paginator
 from .models import Recipe
 from .forms import RecipeForm
 
@@ -16,8 +18,14 @@ def show_recipe(request, id):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
+    paginator = Paginator(recipes, 2)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    # context = {
+    #         "recipe_list": recipes,
+    #         }
     context = {
-            "recipe_list": recipes,
+            "recipe_list": page_obj 
             }
     return render(request, "recipes/list.html", context)
 
