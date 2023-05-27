@@ -11,11 +11,11 @@ Scrumptious Recipes
   <div class="recipe-grid">
 
     {% for recipe in recipe_list %}
-    <div class="recipe-item {% cycle 'item1' 'item2' 'item3' %}">
-      <img class="thumbnail" src="{{recipe.picture.url}}" />
-      <h3 class="recipe-item-heading">
-        <a class="recipe-link" href="{% url 'show_recipe' recipe.id %}">{{ recipe.title }}</a>
-      </h3>
+    <div role="button" class="recipe-item" onclick="location.href='{% url 'show_recipe' recipe.id %}'">
+      <div class="img-container">
+        <img class="thumbnail" src="{{recipe.picture.url}}" alt="A Picture of {{recipe.title}}"/>
+      </div>
+      <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
       <time>{{ recipe.created_on|date:"j F Y" }}</time>
       <div>4.3 stars</div>
     </div>

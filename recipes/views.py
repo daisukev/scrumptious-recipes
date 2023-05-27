@@ -29,6 +29,9 @@ def recipe_list(request):
             }
     return render(request, "recipes/list.html", context)
 
+
+
+
 def create_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
