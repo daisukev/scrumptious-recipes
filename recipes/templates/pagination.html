@@ -1,0 +1,30 @@
+
+  <div class="pagination">
+    {% if recipe_list.has_previous %}
+    <div>
+      &#x276E;
+      <a href="?page={{ recipe_list.previous_page_number}}">Previous</a>
+    </div>
+    {%else%}
+    <div> &#x276E; Previous</div>
+    {%endif%}
+    <div>
+      {% for number in recipe_list.paginator.page_range %}
+        {% if number == recipe_list.number %}
+        <span class="current">{{recipe_list.number}}</span>
+          {%else%}
+            <a class="page-number"  href="?page={{ number }}">{{ number }}</a>
+      {%endif%}
+      {%endfor%}
+      
+    </div>
+    {% if recipe_list.has_next %}
+    <div>
+      <a href="?page={{recipe_list.next_page_number}}">Next</a> 
+     &#x276F;
+    </div>
+    {%else%}
+      <div>Next &#x276F;
+    </div>
+    {% endif %}
+  </div>
