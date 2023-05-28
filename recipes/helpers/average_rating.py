@@ -8,4 +8,4 @@ def average_rating(ratings):
     elif sum_of_ratings == 0: # if there is all zero ratings
         return 0.0
     else: # otherwise, return the average
-        return sum_of_ratings/ num_ratings
+        return round(sum_of_ratings/ num_ratings, 1)

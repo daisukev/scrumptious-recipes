@@ -4,10 +4,7 @@ Scrumptious Recipes
 {% endblock title %}
 
 {% block content %}
-<main>
-  <h1>Scrumptious Recipes</h1>
   <h2>Explore Recipes</h2>
-  {% include 'pagination.html' %}
   <div class="recipe-grid">
 
     {% for recipe in recipe_list %}
@@ -18,6 +15,13 @@ Scrumptious Recipes
       <div class="recipe-item-lower">
         
         <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
+        <p>
+        {%if recipe.description|length < 150 %}
+          {{recipe.description}}
+        {%else%}
+        {{recipe.description|truncatechars:150}} <a href="{% url 'show_recipe' recipe.id %}">read more</a>
+        {%endif%}
+        </p>
         <div class ="author">By Michelle Gray</div>
         {% include 'rating.html' %}
       </div>
@@ -25,5 +29,4 @@ Scrumptious Recipes
     {% endfor %}
   </div>
   {% include 'pagination.html' %}
-</main>
 {% endblock content %}

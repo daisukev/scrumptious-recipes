@@ -2,26 +2,51 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
-    <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
+  <title>{% block title %}{% endblock title %}</title>
+  <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
 </head>
+
 <body>
   <div class="container">
-  <header>
-    <nav>
-      <div class="nav-list">
-      <a class = 'nav-item' href="{% url 'recipe_list' %}">Main page</a>
-      <a class ='nav-item' href="{% url 'create_recipe' %}">Create a Recipe</a>
-      </div>
-    </nav>
-  </header>
-    {% block content %}{% endblock content %}
-  </div>
+    <header>
+        <a href="{% url 'recipe_list' %}">
+        <h1>Scrumptious Recipes</h1></a>
+      <nav>
+        <ul>
+          <li>
+            <a class='nav-item' href="{% url 'recipe_list' %}">Main page</a>
+          </li>
+          <li>
+            <a class='nav-item' href="{% url 'create_recipe' %}">Create a Recipe</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main class="content-container">
+
+      {% block content %}{% endblock content %}
+    </main>
     <footer>
-      Made with love by Scrumptious Recipes
+      <div class="footer-content">
+        Made with love by Scrumptious Recipes
+      </div>
     </footer>
+  </div>
+    <script>
+
+    fetch("{% url 'recipe_list' %}")
+    .then(res => res.json())
+      .then(data=>{
+        console.log(data)
+      })
+    .catch(error=>{
+      console.log(error)
+    });
+    </script>
 </body>
+
 </html>

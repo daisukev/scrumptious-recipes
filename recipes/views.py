@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, render, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from .models import Recipe
-from .forms import RecipeForm
+from .forms import RecipeForm, RatingForm
+from django.http import JsonResponse
 
 
 # Given an id number, this shows the corresponding recipe
@@ -29,8 +30,19 @@ def recipe_list(request):
             }
     return render(request, "recipes/list.html", context)
 
-
-
+def create_rating(request,id):
+    recipe = get_object_or_404(Recipe, id=id)
+    request.POST = request.POST.copy()
+    request.POST['recipe'] = id 
+    print(request.POST)
+    if request.method=="POST":
+        # TODO: Create rating API so I can make a call in a form on the show_recipe page
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"message": "rating added successfully."})
+        else:
+            return JsonResponse({"message": "could not add rating."})
 
 def create_recipe(request):
     if request.method == "POST":

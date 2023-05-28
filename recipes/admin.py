@@ -6,6 +6,8 @@ from .models import Recipe, Rating
 # Version 1
 # admin.site.register(Recipe)
 
+class RatingInline(admin.TabularInline):
+    model = Rating
 # Version 2
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
@@ -14,8 +16,13 @@ class RecipeAdmin(admin.ModelAdmin):
             "id",
             "description"
             )
+    inlines = [
+            RatingInline,
+            ]
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display=(
             "value",
+            "recipe",
             )
+

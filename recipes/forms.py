@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Recipe
+from .models import Recipe,Rating
 
 class RecipeForm(ModelForm):
     class Meta:
@@ -12,3 +12,11 @@ class RecipeForm(ModelForm):
                 "description"
                 )
         exclude = ['thumbnail']
+
+class RatingForm(ModelForm):
+    class Meta:
+        model = Rating
+        fields = (
+                "value",
+                "recipe",
+                )

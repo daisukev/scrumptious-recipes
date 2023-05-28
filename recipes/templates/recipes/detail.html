@@ -4,13 +4,19 @@ Scrumptious Recipes - {{ recipe.title }}
 {% endblock title %}
 
 {% block content %}
-    <main>
       <h1>{{ recipe.title }}</h1>
       <img src="{{recipe.picture.url}}" />
       {% include 'rating.html' %}
       <time> {{ recipe.created_on|date:"F j, Y" }} </time>
       <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
       <p>{{recipe.description}}</p>
+      <form action ="{% url 'create_rating' recipe.id %}" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <div>
+        Rating: <input name ="value" type="number" min=1 max=5>
+        </div>
+        <button>Submit</button>
+      </form>
       <h2>Ingredients</h2>
       <table class="ingredients-table">
         <thead>
@@ -51,5 +57,4 @@ Scrumptious Recipes - {{ recipe.title }}
         <li>Grill the tortillas</li>
         <li>Assemble the tacos with veggies, salsa, and cheese</li>
       </ol>
-    </main>
 {% endblock content %}

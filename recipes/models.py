@@ -16,7 +16,9 @@ class Rating(models.Model):
     # It would be 1 Recipe to many Ratings
 
     recipe = models.ForeignKey('Recipe', related_name="ratings", on_delete=models.CASCADE)
-    # user = models.ForeignKey('User', realted_name="users", on_delete=models.CASCADE)
+    # user = models.ForeignKey('User', related_name="users", on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.value)
 
 
 
@@ -26,7 +28,8 @@ class Recipe(models.Model):
     thumbnail = models.ImageField(upload_to="images/", default ='https://placehold.co/300x225')
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    def __string__(self):
+
+    def __str__(self):
         return self.title
 
     @property 
@@ -43,13 +46,20 @@ class Recipe(models.Model):
 
         thumb_data = BytesIO() # create binary stream to store the thumbnail 
         thumb_img = Image.open(self.picture) #open a copy  of the picture
+        thumb_height = 285
+        thumb_width =  380
 
         # check dimensions of the picture
         print(thumb_img.width, thumb_img.height)
         if thumb_img.height >= thumb_img.width: # if it's a tall image, we want the thumbnail size  to adhere to the width, so the height is set arbitrarily large
-            thumbnail_size = (400, 800)
+            # height * thumbnail width / img_width
+            target_height  = int(thumb_img.height * thumb_width / thumb_img.width)
+            thumbnail_size = (thumb_width, target_height)
+            print("tall image: ", thumbnail_size)
         else:
-            thumbnail_size = (400, 300)
+            target_width = int((thumb_height * thumb_img.width) / thumb_img.height)
+            thumbnail_size = (target_width, thumb_height)
+            print("wide image: ", thumbnail_size)
 
 
         thumb_img.thumbnail(thumbnail_size) # shrink it
@@ -58,6 +68,7 @@ class Recipe(models.Model):
         # file formats 
         thumb_img.save(thumb_data, format=thumb_img.format)   # save the thumbnail same filetype as the original
         thumb_img.close() # close the image
+        ## TODO: strip the original file extension
         thumb_path = f"{self.picture}_thumbnail.{thumb_img.format.lower()}" # thumbnail should be the picture, but with _thumbnail.EXT added to it
         thumb_file = File(thumb_data)
         file_path = os.path.join('media', thumb_path)
@@ -67,4 +78,5 @@ class Recipe(models.Model):
         
         self.thumbnail.save(thumb_path, thumb_file, save=False)
 
-        super(Recipe, self).save(*args, **kwargs, update_fields=['thumbnail'])
+        super(Recipe, self).save(*args, **kwargs)
+
