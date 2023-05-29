@@ -4,57 +4,140 @@ Scrumptious Recipes - {{ recipe.title }}
 {% endblock title %}
 
 {% block content %}
-      <h1>{{ recipe.title }}</h1>
-      <img src="{{recipe.picture.url}}" />
-      {% include 'rating.html' %}
-      <time> {{ recipe.created_on|date:"F j, Y" }} </time>
-      <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
-      <p>{{recipe.description}}</p>
-      <form action ="{% url 'create_rating' recipe.id %}" enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        <div>
-        Rating: <input name ="value" type="number" min=1 max=5>
-        </div>
-        <button>Submit</button>
-      </form>
-      <h2>Ingredients</h2>
-      <table class="ingredients-table">
-        <thead>
-          <tr>
-            <th>Amount</th>
-            <th>Food item</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1 cup</td>
-            <td>Green beans</td>
-          </tr>
-          <tr>
-            <td>3 ears</td>
-            <td>Fresh corn</td>
-          </tr>
-          <tr>
-            <td>2 cups</td>
-            <td>Tomatillo salsa</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>Corn tortillas</td>
-          </tr>
-          <tr>
-            <td>0.5 cups</td>
-            <td>Cotija cheese</td>
-          </tr>
-        </tbody>
-      </table>
-      <h2>Steps</h2>
-      <ol>
-        <li>Blanch the green beans</li>
-        <li>Grill the green beans and the ears of corn</li>
-        <li>Chop the green beans</li>
-        <li>Slice the corn off the cob</li>
-        <li>Grill the tortillas</li>
-        <li>Assemble the tacos with veggies, salsa, and cheese</li>
-      </ol>
+<h1>{{ recipe.title }}</h1>
+<img src="{{recipe.picture.url}}" />
+  <div class="stars-container">
+    </span>
+    <span class="star" data-value=5>★</span>
+    <span class="star" data-value=4>★</span>
+    <span class="star" data-value=3>★</span>
+    <span class="star" data-value=2>★</span>
+    <span class="star" data-value=1>★</span>
+  </div>
+{% include 'rating.html' %}
+<time> {{ recipe.created_on|date:"F j, Y" }} </time>
+<a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
+<p>{{recipe.description}}</p>
+<!-- <form action="{% url 'create_rating' recipe.id %}" enctype="multipart/form-data" method="post"> -->
+<!--   {% csrf_token %} -->
+<!--   <div> -->
+<!--     Rating: <input name="value" type="number" min=1 max=5> -->
+<!--   </div> -->
+<!--   <button>Submit</button> -->
+<!-- </form> -->
+<h2>Ingredients</h2>
+<table class="ingredients-table">
+  <caption>Ingredients List</caption>
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Food item</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 cup</td>
+      <td>Green beans</td>
+    </tr>
+    <tr>
+      <td>3 ears</td>
+      <td>Fresh corn</td>
+    </tr>
+    <tr>
+      <td>2 cups</td>
+      <td>Tomatillo salsa</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Corn tortillas</td>
+    </tr>
+    <tr>
+      <td>0.5 cups</td>
+      <td>Cotija cheese</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Steps</h2>
+<ol>
+  <li>Blanch the green beans</li>
+  <li>Grill the green beans and the ears of corn</li>
+  <li>Chop the green beans</li>
+  <li>Slice the corn off the cob</li>
+  <li>Grill the tortillas</li>
+  <li>Assemble the tacos with veggies, salsa, and cheese</li>
+</ol>
 {% endblock content %}
+
+
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    let initialRating
+    if("{{recipe.average_rating}}"=== "None") // If there is 0 ratings, this returns "None" so have to initialize it with a 0
+      initialRating =0
+    else
+      initialRating = {{recipe.average_rating}}
+  const stars = document.querySelectorAll(".star");
+  const userIsLoggedIn = true // TODO: Replace with the actual logic from Django when User is implemented
+
+  // initialize the star rating
+  function setStars(rating) {
+    let localRating = rating
+    let clicked = false // track if the ratings  have been clicked. 
+    /* If  ratings have been clicked, it stops the mouseout event listener so it retains the user score. */
+    for (let i = stars.length - 1; i >= 0; i--) {
+      if (localRating >= 1) {
+        stars[i].classList.add('gold')
+      }
+      else{
+        //TODO: Add partial star support. add a style variable to the partial star. unless localRating <=0.1
+      }
+      localRating--
+    }
+  }
+  function resetStars() {
+    for (let i = 0; i < stars.length; i++)
+      stars[i].classList.remove('gold')
+  }
+  setStars(initialRating)
+  async function addRating(url = "", value)
+    {
+      headers = new Headers()
+      headers.append('X-CSRFToken', '{{csrf_token}}')
+      formData = new FormData()
+      formData.append('value', value)
+      console.log(formData.entries())
+      const res = await fetch(url,{
+        method: "POST",
+        body: formData,
+        credentials: 'same-origin',
+        headers: headers,
+      })
+          const jsonData = await res.json()
+          console.log(jsonData)
+    // TODO: this is where you handle if it fails or if it succeeds. modify page to let user know what happened after clicking. also if success, remove eventlisteners
+    }
+
+  if (userIsLoggedIn) {
+    stars.forEach((star, index) => {
+      star.addEventListener("mouseover", () => {
+        resetStars()
+      })
+      star.addEventListener("mouseout", () => {
+        setStars(initialRating)
+      })
+      star.addEventListener("click", (event) => {
+          value = star.dataset.value[0]
+          console.log('star value: ', value)
+          addRating("{% url 'create_rating' recipe.id %}", value)
+
+      })
+
+
+    })
+  }
+  })
+
+</script>
+{% endblock %}

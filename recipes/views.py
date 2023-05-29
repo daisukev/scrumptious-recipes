@@ -33,7 +33,7 @@ def recipe_list(request):
 def create_rating(request,id):
     recipe = get_object_or_404(Recipe, id=id)
     request.POST = request.POST.copy()
-    request.POST['recipe'] = id 
+    request.POST['recipe'] = id  # append the recipe_id to the post request.
     print(request.POST)
     if request.method=="POST":
         # TODO: Create rating API so I can make a call in a form on the show_recipe page

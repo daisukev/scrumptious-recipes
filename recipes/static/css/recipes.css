@@ -79,6 +79,9 @@ a:hover{
   gap: 1rem;
   justify-items: center;
 }
+.ingredients-table{
+  border-collapse: collapse;
+}
 
 .ingredients-table tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.1);
@@ -265,5 +268,44 @@ nav ul li{
     grid-template-rows: auto 1fr auto auto;
     padding: 0.5rem;
   }
+}
+
+
+.stars-container{
+  /* direction: rtl; */
+  justify-content: flex-end;
+
+  /* display: inline-block; */
+  display: flex;
+  flex-direction: row-reverse;
+  font-size:20px;
+}
+
+.star {
+  background: black;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background 200ms;
+  margin:0;
+  padding:0;
+}
+.gold {
+  background: gold;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.star:hover,
+.star:hover ~ .star,
+.star:hover ~ .star:not(:hover) {
+
+  cursor: pointer;
+  /* color: gold; */
+  background:gold;
+  /* background: -webkit-linear-gradient(0deg, gold 100%, #000 0%); */
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* -webkit-text-fill-color: transparent; */
 }
 

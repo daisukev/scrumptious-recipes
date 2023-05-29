@@ -44,6 +44,8 @@ class Recipe(models.Model):
 
     def save(self, *args, **kwargs):
 
+        ## TODO: maybe do a check to see if the image has changed and skip all this if it hasn't
+
         thumb_data = BytesIO() # create binary stream to store the thumbnail 
         thumb_img = Image.open(self.picture) #open a copy  of the picture
         thumb_height = 285
