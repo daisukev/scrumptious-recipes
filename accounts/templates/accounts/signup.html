@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+Sign Up! - Scrumptious Recipes
+{% endblock title %}
+
+{% block content %}
+<main>
+<h1>Log In!</h1>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p}}
+    <button>Sign Up!</button>
+  </form>
+</main>
+{% endblock content %}
