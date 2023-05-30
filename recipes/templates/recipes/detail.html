@@ -4,6 +4,7 @@ Scrumptious Recipes - {{ recipe.title }}
 {% endblock title %}
 
 {% block content %}
+<div class="recipe-detail">
 <h1>{{ recipe.title }}</h1>
 <img class="recipe-img" src="{{recipe.picture.url}}" />
   <div class="stars-container">
@@ -18,13 +19,7 @@ Scrumptious Recipes - {{ recipe.title }}
 <time> {{ recipe.created_on|date:"F j, Y" }} </time>
 <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
 <p>{{recipe.description}}</p>
-<!-- <form action="{% url 'create_rating' recipe.id %}" enctype="multipart/form-data" method="post"> -->
-<!--   {% csrf_token %} -->
-<!--   <div> -->
-<!--     Rating: <input name="value" type="number" min=1 max=5> -->
-<!--   </div> -->
-<!--   <button>Submit</button> -->
-<!-- </form> -->
+  <p>by {{recipe.author.first_name}} {{recipe.author.last_name}}</p>
 <table class="ingredients-table">
   <caption>Ingredients List</caption>
   <thead>
@@ -34,26 +29,12 @@ Scrumptious Recipes - {{ recipe.title }}
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1 cup</td>
-      <td>Green beans</td>
-    </tr>
-    <tr>
-      <td>3 ears</td>
-      <td>Fresh corn</td>
-    </tr>
-    <tr>
-      <td>2 cups</td>
-      <td>Tomatillo salsa</td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>Corn tortillas</td>
-    </tr>
-    <tr>
-      <td>0.5 cups</td>
-      <td>Cotija cheese</td>
-    </tr>
+      {% for ingredient in recipe.ingredients.all %}
+      <tr>
+        <td>{{ingredient.amount}}</td>
+        <td>{{ingredient.food_item}}</td>
+      </tr>
+      {% endfor %}
   </tbody>
 </table>
 <h2>Steps</h2>
@@ -65,6 +46,12 @@ Scrumptious Recipes - {{ recipe.title }}
   <li>Grill the tortillas</li>
   <li>Assemble the tacos with veggies, salsa, and cheese</li>
 </ol>
+  <ol>
+  {% for step in recipe.steps.all %}
+    <li>{{step.instruction}}</li>
+  {% endfor %}
+</ol>
+</div>
 {% endblock content %}
 
 
@@ -77,7 +64,11 @@ Scrumptious Recipes - {{ recipe.title }}
     else
       initialRating = {{recipe.average_rating}}
   const stars = document.querySelectorAll(".star");
-  const userIsLoggedIn = true // TODO: Replace with the actual logic from Django when User is implemented
+  {% if user.is_authenticated %}
+    const userIsLoggedIn = true 
+  {% else %}
+      const userIsLoggedIn= false
+  {% endif %}
 
   function setStars(rating) {
     let localRating = rating
@@ -88,8 +79,7 @@ Scrumptious Recipes - {{ recipe.title }}
         stars[i].classList.add('gold')
       }
       else{
-        if(localRating >0.1)
-          console.log(Math.round(localRating * 10) * 0.1 )
+          if(localRating >0.1){}
 
         //TODO: Add partial star support. add a style variable to the partial star. unless localRating <=0.1
       }
@@ -100,17 +90,17 @@ Scrumptious Recipes - {{ recipe.title }}
     for (let i = 0; i < stars.length; i++)
       stars[i].classList.remove('gold')
   }
+
+  setStars(initialRating)
   document.addEventListener("DOMContentLoaded", (event) => {
 
   // initialize the star rating
-  setStars(initialRating)
   async function addRating(url = "", value)
     {
       headers = new Headers()
       headers.append('X-CSRFToken', '{{csrf_token}}')
       formData = new FormData()
       formData.append('value', value)
-      console.log(formData.entries())
       const res = await fetch(url,{
         method: "POST",
         body: formData,
@@ -118,7 +108,7 @@ Scrumptious Recipes - {{ recipe.title }}
         headers: headers,
       })
           const jsonData = await res.json()
-          console.log(jsonData)
+        console.log(jsonData)
     return jsonData[0]
     // TODO: this is where you handle if it fails or if it succeeds. modify page to let user know what happened after clicking. also if success, remove eventlisteners
     }
@@ -128,18 +118,14 @@ Scrumptious Recipes - {{ recipe.title }}
         let clickListeners = []
     stars.forEach((star, index) => {
       const mouseoverListener = (event)=>{
-            console.log('mouse over')
           resetStars()
       }
       const mouseoutListener = (event) =>{
-            console.log('mouse out')
         setStars(initialRating)
       }
       const clickListener = (event)=>{
-            console.log('click event')
           value = star.dataset.value[0]
-          console.log('star value: ', value)
-        if(addRating("{% url 'create_rating' recipe.id %}", value) ){
+        if(addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value) ){
               // remove all event listeners
               mouseoverListeners.forEach(({star, mouseoverListener})=>{
                 star.removeEventListener("mouseover", mouseoverListener)
@@ -164,7 +150,6 @@ Scrumptious Recipes - {{ recipe.title }}
       mouseoverListeners.push({ star, mouseoverListener })
       mouseoutListeners.push({ star, mouseoutListener })
       clickListeners.push({ star, clickListener })
-      console.log(mouseoverListeners, mouseoutListeners, clickListeners)
     })
   }
   })

@@ -6,6 +6,9 @@ Scrumptious Recipes
 {% block content %}
 <main class="content-container">
   <h2>Explore Recipes</h2>
+  {% if user.is_authenticated %}
+  <p>Hello, {{user.username}}.</p> 
+  {% endif %}
   <div class="recipe-grid">
 
     {% for recipe in recipe_list %}

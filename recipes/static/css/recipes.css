@@ -43,9 +43,11 @@ nav {
 }
 
 .recipe-item-lower{
-
+  height: 100%;
   padding: 0.5rem;
   padding-top: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
 }
 .recipe-item-lower p {
  margin: 0; 
@@ -82,7 +84,6 @@ h2{
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  justify-items: center;
 }
 .ingredients-table{
   border-collapse: collapse;
@@ -300,6 +301,7 @@ nav ul li{
   /* -webkit-text-fill-color: transparent; */
 }
 .recipe-img{
+  max-width: 90vw;
 }
 
 th, caption{
@@ -310,3 +312,22 @@ caption{
   font-size: 1.5rem;
 }
 
+.recipe-detail {
+  padding: 1rem;
+}
+.user-links{
+  display: grid;
+  grid-template-columns: autofill;
+  align-items: end;
+  margin: 0;
+  padding: 0;
+}
+.user-links > ul{
+  list-style:none;
+  padding: 0;
+  margin: 0;
+  align-items: baseline;
+  display: flex;
+  align-items: flex-end;
+
+}

@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, formset_factory
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
 from .models import Recipe,Rating
@@ -19,4 +19,6 @@ class RatingForm(ModelForm):
         fields = (
                 "value",
                 "recipe",
+                "author",
                 )
+

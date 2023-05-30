@@ -7,6 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # from django.forms import ModelForm
 from django.db.models import Avg
 from .helpers.average_rating import average_rating
+from django.conf import settings
 
 class Rating(models.Model):
     # Ensure that the rating is at most a 5 and at least a 1 (1-5 star rating)
@@ -16,11 +17,36 @@ class Rating(models.Model):
     # It would be 1 Recipe to many Ratings
 
     recipe = models.ForeignKey('Recipe', related_name="ratings", on_delete=models.CASCADE)
-    # user = models.ForeignKey('User', related_name="users", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            related_name="ratings",
+            on_delete = models.CASCADE,
+            # this wasn't present originally so this is use setting the default value
+            null = True,)
     def __str__(self):
         return str(self.value)
 
+class RecipeStep(models.Model):
+    instruction = models.TextField()
+    step_number = models.PositiveIntegerField()
+    recipe = models.ForeignKey("Recipe", related_name="steps", on_delete=models.CASCADE)
+    def __str__(self):
+        return self.instruction
+    def recipe_title(self):
+        return self.recipe.title
+    class Meta:
+        # Default is to order list by ID, this overrides it to make it order by the order attribute
+        ordering = ["step_number"]
 
+class Ingredient(models.Model):
+    amount = models.CharField(max_length=100)
+    food_item=  models.CharField(max_length=100)
+    recipe = models.ForeignKey(
+            "Recipe", related_name="ingredients", on_delete=models.CASCADE,)
+    class Meta:
+        ordering= ["food_item"]
+    def __str__(self):
+        return self.food_item
 
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
@@ -28,6 +54,14 @@ class Recipe(models.Model):
     thumbnail = models.ImageField(upload_to="images/", default ='https://placehold.co/300x225')
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
+
+    author = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            related_name="recipes",
+            on_delete = models.CASCADE,
+            # this wasn't present originally so this is use setting the default value
+            null = True,
+            )
 
     def __str__(self):
         return self.title

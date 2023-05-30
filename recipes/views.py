@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, render, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator
-from .models import Recipe
+from .models import Recipe, Rating
 from .forms import RecipeForm, RatingForm
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # Given an id number, this shows the corresponding recipe
@@ -30,29 +32,75 @@ def recipe_list(request):
             }
     return render(request, "recipes/list.html", context)
 
-def create_rating(request,id):
-    recipe = get_object_or_404(Recipe, id=id)
+@login_required
+def my_recipe_list(request):
+    recipes = Recipe.objects.filter(author= request.user)
+    paginator = Paginator(recipes, 9)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {
+            "recipe_list": page_obj,
+            }
+    return render(request, "recipes/list.html", context)
+
+
+# This handles creation and editing of ratings.
+@login_required
+def create_rating(request,recipe_id, user_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    author = get_object_or_404(User, id = user_id) # This is the creator of the rating, not the author of the recipe. recipe.author is the recipe author.
+
+
+    # if author == recipe.author, reject
+    try:
+        if author.id == recipe.author.id:
+            return JsonResponse({
+                "success": False,
+                "message":"You cannot create a rating for your own recipe"
+                })
+    except AttributeError: # We don't care if there is no recipe author. 
+        pass
+
+
     request.POST = request.POST.copy()
-    request.POST['recipe'] = id  # append the recipe_id to the post request.
-    print(request.POST)
+    request.POST['recipe'] = recipe_id  # append the recipe_id to the post request.
+    request.POST['author'] = user_id
+
     if request.method=="POST":
-        # TODO: Create rating API so I can make a call in a form on the show_recipe page
         form = RatingForm(request.POST)
         if form.is_valid():
+
+            ## check if the user already has a rating and update if they do
+            ratings = Rating.objects.filter(author= author, recipe=recipe)
+            if ratings:
+                form = RatingForm(request.POST, instance=ratings[0])
+                form.save()
+                return JsonResponse({
+                    "success": True,
+                    "message": "Updated Rating"})
+                # if there is a rating, then update it
+                # if not, it'll continue down the rest of the method
             form.save()
             return JsonResponse({
                 "success": True,
-                "message": "rating added successfully."})
+                "message": "Rating added successfully."})
         else:
             return JsonResponse({
                 "success": False,
-                "message": "could not add rating."})
+                "message": "Could not add rating."})
 
+@login_required
 def create_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            # don't save immediately
+            recipe = form.save(False)
+            # edit field 
+            recipe.author = request.user
+            # save entry
+            recipe.save()
+            # form.save()
         return redirect(recipe_list)
     else:
         form = RecipeForm()
