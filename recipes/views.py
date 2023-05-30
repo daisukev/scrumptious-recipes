@@ -29,6 +29,7 @@ def recipe_list(request):
     # TODO: Implement the ratings for the list view
     context = {
             "recipe_list": page_obj,
+            "view": "all_recipes"
             }
     return render(request, "recipes/list.html", context)
 
@@ -40,6 +41,7 @@ def my_recipe_list(request):
     page_obj = paginator.get_page(page_number)
     context = {
             "recipe_list": page_obj,
+            "view": "my_recipe_list"
             }
     return render(request, "recipes/list.html", context)
 

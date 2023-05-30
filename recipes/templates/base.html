@@ -16,11 +16,10 @@
         <ul>
             {% if user.is_authenticated %}
             <li class='nav-item'>
-              user: {{user}}
-              <a href="{% url 'user_logout' %}"> Logout </a>
+            <a href="{% url 'my_recipe_list' %}">{{user.first_name}} {{user.last_name}}'s Recipes</a>
               </li>
             <li class='nav-item'>
-              <a href="{% url 'my_recipe_list' %}">My Recipes</a>
+              <a href="{% url 'user_logout' %}"> Logout </a>
               </li>
             {% else %}
             <li class='nav-item'>

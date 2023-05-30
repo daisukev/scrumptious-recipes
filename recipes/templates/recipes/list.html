@@ -7,7 +7,12 @@ Scrumptious Recipes
 <main class="content-container">
   <h2>Explore Recipes</h2>
   {% if user.is_authenticated %}
-  <p>Hello, {{user.username}}.</p> 
+  {% if not recipe_list and view == "my_recipe_list" %}
+  <p>
+  You have no recipes. Why not <a href="{% url 'create_recipe' %}">create one?</a>
+  </p>
+  {% endif %}
+
   {% endif %}
   <div class="recipe-grid">
 
@@ -31,7 +36,14 @@ Scrumptious Recipes
       <a href="{% url 'show_recipe' recipe.id %}">Read more.</a>
 
         </p>
-        <div class ="author">By Michelle Gray</div>
+        <div class ="author">
+          By
+          {% if recipe.author %}
+          {{recipe.author.first_name}} {{recipe.author.last_name}}
+          {% else %}
+          Anonymous
+          {%endif%}
+        </div>
         {% include 'rating.html' %}
       </div>
     </div>

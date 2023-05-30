@@ -19,7 +19,12 @@ Scrumptious Recipes - {{ recipe.title }}
 <time> {{ recipe.created_on|date:"F j, Y" }} </time>
 <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
 <p>{{recipe.description}}</p>
-  <p>by {{recipe.author.first_name}} {{recipe.author.last_name}}</p>
+  <p>by 
+    {% if recipe.author%}
+    {{recipe.author.first_name}} {{recipe.author.last_name}}</p>
+  {%else%}
+  Anyonymous 
+  {%endif%}
 <table class="ingredients-table">
   <caption>Ingredients List</caption>
   <thead>
