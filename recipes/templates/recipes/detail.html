@@ -5,7 +5,7 @@ Scrumptious Recipes - {{ recipe.title }}
 
 {% block content %}
 <h1>{{ recipe.title }}</h1>
-<img src="{{recipe.picture.url}}" />
+<img class="recipe-img" src="{{recipe.picture.url}}" />
   <div class="stars-container">
     </span>
     <span class="star" data-value=5>★</span>
@@ -25,7 +25,6 @@ Scrumptious Recipes - {{ recipe.title }}
 <!--   </div> -->
 <!--   <button>Submit</button> -->
 <!-- </form> -->
-<h2>Ingredients</h2>
 <table class="ingredients-table">
   <caption>Ingredients List</caption>
   <thead>
@@ -72,7 +71,6 @@ Scrumptious Recipes - {{ recipe.title }}
 
 {% block scripts %}
 <script>
-  document.addEventListener("DOMContentLoaded", (event) => {
     let initialRating
     if("{{recipe.average_rating}}"=== "None") // If there is 0 ratings, this returns "None" so have to initialize it with a 0
       initialRating =0
@@ -81,16 +79,18 @@ Scrumptious Recipes - {{ recipe.title }}
   const stars = document.querySelectorAll(".star");
   const userIsLoggedIn = true // TODO: Replace with the actual logic from Django when User is implemented
 
-  // initialize the star rating
   function setStars(rating) {
     let localRating = rating
     let clicked = false // track if the ratings  have been clicked. 
     /* If  ratings have been clicked, it stops the mouseout event listener so it retains the user score. */
     for (let i = stars.length - 1; i >= 0; i--) {
-      if (localRating >= 1) {
+      if (localRating >= 0.5) {
         stars[i].classList.add('gold')
       }
       else{
+        if(localRating >0.1)
+          console.log(Math.round(localRating * 10) * 0.1 )
+
         //TODO: Add partial star support. add a style variable to the partial star. unless localRating <=0.1
       }
       localRating--
@@ -100,6 +100,9 @@ Scrumptious Recipes - {{ recipe.title }}
     for (let i = 0; i < stars.length; i++)
       stars[i].classList.remove('gold')
   }
+  document.addEventListener("DOMContentLoaded", (event) => {
+
+  // initialize the star rating
   setStars(initialRating)
   async function addRating(url = "", value)
     {
@@ -116,25 +119,52 @@ Scrumptious Recipes - {{ recipe.title }}
       })
           const jsonData = await res.json()
           console.log(jsonData)
+    return jsonData[0]
     // TODO: this is where you handle if it fails or if it succeeds. modify page to let user know what happened after clicking. also if success, remove eventlisteners
     }
-
   if (userIsLoggedIn) {
+        let mouseoverListeners = []
+        let mouseoutListeners = []
+        let clickListeners = []
     stars.forEach((star, index) => {
-      star.addEventListener("mouseover", () => {
-        resetStars()
-      })
-      star.addEventListener("mouseout", () => {
+      const mouseoverListener = (event)=>{
+            console.log('mouse over')
+          resetStars()
+      }
+      const mouseoutListener = (event) =>{
+            console.log('mouse out')
         setStars(initialRating)
-      })
-      star.addEventListener("click", (event) => {
+      }
+      const clickListener = (event)=>{
+            console.log('click event')
           value = star.dataset.value[0]
           console.log('star value: ', value)
-          addRating("{% url 'create_rating' recipe.id %}", value)
+        if(addRating("{% url 'create_rating' recipe.id %}", value) ){
+              // remove all event listeners
+              mouseoverListeners.forEach(({star, mouseoverListener})=>{
+                star.removeEventListener("mouseover", mouseoverListener)
+              })
+              mouseoutListeners.forEach(({star, mouseoutListener})=>{
+                star.removeEventListener("mouseout", mouseoutListener)
+              })
+              clickListeners.forEach(({star, clickListener})=>{
+                star.removeEventListener("click", clickListener)
+              })
+              setStars(initialRating)
+              // TODO: show confirmation of added rating on page somehow. Modify <span> contents probably
+              // TODO: this will not be necessary, but rather, check if the user has already created a rating for this. If they have, edit rating. This can probably be done in the logic of the view rather than two separate views.
+              // TODO: maybe make the css only load if the user is logged in as well. alternatively change css with event listener. Can use the data-value of the spans based to determine how many stars you highlight with gold. 
+        }
+          
+      }
+      star.addEventListener("mouseover", mouseoverListener)
+      star.addEventListener("mouseout", mouseoutListener)
+      star.addEventListener("click", clickListener  )
 
-      })
-
-
+      mouseoverListeners.push({ star, mouseoverListener })
+      mouseoutListeners.push({ star, mouseoutListener })
+      clickListeners.push({ star, clickListener })
+      console.log(mouseoverListeners, mouseoutListeners, clickListeners)
     })
   }
   })

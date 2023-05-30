@@ -40,9 +40,13 @@ def create_rating(request,id):
         form = RatingForm(request.POST)
         if form.is_valid():
             form.save()
-            return JsonResponse({"message": "rating added successfully."})
+            return JsonResponse({
+                "success": True,
+                "message": "rating added successfully."})
         else:
-            return JsonResponse({"message": "could not add rating."})
+            return JsonResponse({
+                "success": False,
+                "message": "could not add rating."})
 
 def create_recipe(request):
     if request.method == "POST":

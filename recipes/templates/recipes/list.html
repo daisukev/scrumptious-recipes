@@ -4,23 +4,29 @@ Scrumptious Recipes
 {% endblock title %}
 
 {% block content %}
+<main class="content-container">
   <h2>Explore Recipes</h2>
   <div class="recipe-grid">
 
     {% for recipe in recipe_list %}
-    <div role="button" class="recipe-item" onclick="location.href='{% url 'show_recipe' recipe.id %}'">
+    <div class="recipe-item">
       <div class="img-container">
+        <a href="{% url 'show_recipe' recipe.id %}">
         <img class="thumbnail" src="{{recipe.thumbnail.url}}" alt="A Picture of {{recipe.title}}"/>
+</a>
       </div>
       <div class="recipe-item-lower">
         
+        <a href="{% url 'show_recipe' recipe.id %}">
         <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
+        </a>
         <p>
         {%if recipe.description|length < 150 %}
           {{recipe.description}}
         {%else%}
-        {{recipe.description|truncatechars:150}} <a href="{% url 'show_recipe' recipe.id %}">read more</a>
-        {%endif%}
+        {{recipe.description|truncatechars:150}}         {%endif%}
+      <a href="{% url 'show_recipe' recipe.id %}">Read more.</a>
+
         </p>
         <div class ="author">By Michelle Gray</div>
         {% include 'rating.html' %}
@@ -28,5 +34,6 @@ Scrumptious Recipes
     </div>
     {% endfor %}
   </div>
+</main>
   {% include 'pagination.html' %}
 {% endblock content %}
