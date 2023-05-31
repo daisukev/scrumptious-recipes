@@ -50,8 +50,8 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    picture = models.ImageField(upload_to="images/")
-    thumbnail = models.ImageField(upload_to="images/", default ='https://placehold.co/300x225')
+    picture = models.ImageField(upload_to="images")
+    thumbnail = models.ImageField(upload_to="thumbnails", default ='https://placehold.co/300x225')
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -114,12 +114,17 @@ class Recipe(models.Model):
         thumb_img.save(thumb_data, format=thumb_img.format)   # save the thumbnail same filetype as the original
         thumb_img.close() # close the image
         ## TODO: strip the original file extension
-        thumb_path = f"images/{self.picture}_thumbnail.{thumb_img.format.lower()}" # thumbnail should be the picture, but with _thumbnail.EXT added to it
+        stripped_picture_path = os.path.basename(os.path.splitext(str(self.picture))[0])
+
+        print(stripped_picture_path)
+        thumb_path = f"{stripped_picture_path}_thumbnail.{thumb_img.format.lower()}" # thumbnail should be the picture, but with _thumbnail.EXT added to it
+        thumb_file_path= os.path.join('thumbnails', thumb_path)
         thumb_file = File(thumb_data)
-        file_path = os.path.join('media', thumb_path)
-        with open(file_path, 'wb') as destination:
-            for chunk in thumb_file.chunks():
-                destination.write(chunk)
+        file_path = os.path.join('media', thumb_file_path)
+
+        # with open(file_path, 'wb') as destination:
+        #     for chunk in thumb_file.chunks():
+        #         destination.write(chunk)
         
         self.thumbnail.save(thumb_path, thumb_file, save=False)
 
