@@ -156,6 +156,7 @@ header{
   border-bottom: 2px solid var(--red-color);
   box-shadow: 2px 2px 10px rgb(0 0 0 / 0.2);
   margin:0;
+  padding-inline: 1rem;
 }
 .header-content{
   display: grid;
@@ -319,7 +320,6 @@ caption{
   align-items: end;
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid var(--text-color);
 }
 .user-links a{
   color: var(--text-color);
@@ -336,6 +336,9 @@ caption{
   justify-content: end;
 
 }
-.user-links li{
+.user-links li:not(:last-of-type){
   padding-inline: 0.5rem;
+}
+.user-links li:not(:last-of-type)::after{
+  content: " - ";
 }

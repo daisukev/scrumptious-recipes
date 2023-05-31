@@ -5,8 +5,13 @@ Scrumptious Recipes
 
 {% block content %}
 <main class="content-container">
-  <h2>Explore Recipes</h2>
+  {% if view == "all_recipes"%}
+    <h2>Explore Recipes</h2>
+  {%endif%}
   {% if user.is_authenticated %}
+  {% if view == "my_recipe_list"%}
+  <h2>{{user.first_name}}'s Recipes</h2>
+  {%endif%}
   {% if not recipe_list and view == "my_recipe_list" %}
   <p>
   You have no recipes. Why not <a href="{% url 'create_recipe' %}">create one?</a>
@@ -17,7 +22,7 @@ Scrumptious Recipes
   <div class="recipe-grid">
 
     {% for recipe in recipe_list %}
-    <div class="recipe-item">
+    <div class="recipe-item" >
       <div class="img-container">
         <a href="{% url 'show_recipe' recipe.id %}">
         <img class="thumbnail" src="{{recipe.thumbnail.url}}" alt="A Picture of {{recipe.title}}"/>
@@ -44,11 +49,15 @@ Scrumptious Recipes
           Anonymous
           {%endif%}
         </div>
-        {% include 'rating.html' %}
+        {% include 'recipes/rating.html' %}
       </div>
     </div>
+  {% include 'recipes/stars.html'%}
     {% endfor %}
   </div>
 </main>
   {% include 'pagination.html' %}
 {% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

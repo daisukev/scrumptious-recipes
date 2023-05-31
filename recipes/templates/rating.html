@@ -1,7 +1,0 @@
-<div class="rating">
-{% if recipe.average_rating is None %}
-  Not Rated Yet! 
-{% else %}
-  {{recipe.average_rating}} stars ({{recipe.num_ratings}} rating{{ recipe.num_ratings|pluralize:'s'}})
-{% endif %}
-</div>

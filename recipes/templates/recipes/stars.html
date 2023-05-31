@@ -1,0 +1,98 @@
+<script>
+(function(){
+    let initialRating
+    if("{{recipe.average_rating}}"=== "None") // If there is 0 ratings, this returns "None" so have to initialize it with a 0
+      initialRating =0
+    else
+      initialRating = '{{recipe.average_rating}}'
+  recipeId = {{ recipe.id}}
+  const stars = document.querySelectorAll('#recipe-' + recipeId + ' .star');
+  {% if user.is_authenticated %}
+    const userIsLoggedIn = true 
+  {% else %}
+    const userIsLoggedIn= false
+  {% endif %}
+
+  function setStars(rating) {
+    let localRating = rating
+    for (let i = stars.length - 1; i >= 0; i--) {
+      if (localRating >= 0.5) {
+        stars[i].classList.add('gold')
+      }
+      else{
+          if(localRating >0.1){}
+
+        //TODO: Add partial star support. add a style variable to the partial star. unless localRating <=0.1
+      }
+      localRating--
+    }
+  }
+  function resetStars() {
+    for (let i = 0; i < stars.length; i++)
+      stars[i].classList.remove('gold')
+  }
+
+  setStars(initialRating)
+  document.addEventListener("DOMContentLoaded", (event) => {
+
+  // initialize the star rating
+  async function addRating(url = "", value)
+    {
+      headers = new Headers()
+      headers.append('X-CSRFToken', '{{csrf_token}}')
+      formData = new FormData()
+      formData.append('value', value)
+      const res = await fetch(url,{
+        method: "POST",
+        body: formData,
+        credentials: 'same-origin',
+        headers: headers,
+      })
+          const jsonData = await res.json()
+        console.log(jsonData)
+    return jsonData[0]
+    // TODO: this is where you handle if it fails or if it succeeds. modify page to let user know what happened after clicking. also if success, remove eventlisteners
+              // TODO: maybe make the css only load if the user is logged in as well. alternatively change css with event listener. Can use the data-value of the spans based to determine how many stars you highlight with gold. 
+    }
+  if (userIsLoggedIn) {
+        let mouseoverListeners = []
+        let mouseoutListeners = []
+        let clickListeners = []
+    stars.forEach((star, index) => {
+      const mouseoverListener = (event)=>{
+          resetStars()
+      }
+      const mouseoutListener = (event) =>{
+        setStars(initialRating)
+      }
+      const clickListener = (event)=>{
+          value = star.dataset.value[0]
+
+                    if(addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value) ){
+              setStars(initialRating)
+        }
+
+              <!-- // remove all event listeners -->
+              <!-- mouseoverListeners.forEach(({star, mouseoverListener})=>{ -->
+              <!--   star.removeEventListener("mouseover", mouseoverListener) -->
+              <!-- }) -->
+              <!-- mouseoutListeners.forEach(({star, mouseoutListener})=>{ -->
+              <!--   star.removeEventListener("mouseout", mouseoutListener) -->
+              <!-- }) -->
+              <!-- clickListeners.forEach(({star, clickListener})=>{ -->
+              <!--   star.removeEventListener("click", clickListener) -->
+              <!-- }) -->
+          }    
+      
+      star.addEventListener("mouseover", mouseoverListener)
+      star.addEventListener("mouseout", mouseoutListener)
+      star.addEventListener("click", clickListener  )
+
+      mouseoverListeners.push({ star, mouseoverListener })
+      mouseoutListeners.push({ star, mouseoutListener })
+      clickListeners.push({ star, clickListener })
+    })
+  }
+  })
+})();
+</script>
