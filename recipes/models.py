@@ -80,6 +80,15 @@ class Recipe(models.Model):
 
         ## TODO: maybe do a check to see if the image has changed and skip all this if it hasn't
 
+        # old_instance = Recipe.objects.get(id=self.id)
+        # if old_instance.picture != self.picture:
+        #     if old_instance.picture:
+        #         os.remove(old_instance.picture.path)
+        # if old_instance.thumbnail != self.thumbnail:
+        #     if old_instance.thumbnail:
+        #         os.remove(old_instance.thumbnail.path)
+
+
         thumb_data = BytesIO() # create binary stream to store the thumbnail 
         thumb_img = Image.open(self.picture) #open a copy  of the picture
         thumb_height = 285
@@ -105,7 +114,7 @@ class Recipe(models.Model):
         thumb_img.save(thumb_data, format=thumb_img.format)   # save the thumbnail same filetype as the original
         thumb_img.close() # close the image
         ## TODO: strip the original file extension
-        thumb_path = f"{self.picture}_thumbnail.{thumb_img.format.lower()}" # thumbnail should be the picture, but with _thumbnail.EXT added to it
+        thumb_path = f"images/{self.picture}_thumbnail.{thumb_img.format.lower()}" # thumbnail should be the picture, but with _thumbnail.EXT added to it
         thumb_file = File(thumb_data)
         file_path = os.path.join('media', thumb_path)
         with open(file_path, 'wb') as destination:
@@ -113,6 +122,7 @@ class Recipe(models.Model):
                 destination.write(chunk)
         
         self.thumbnail.save(thumb_path, thumb_file, save=False)
+
 
         super(Recipe, self).save(*args, **kwargs)
 

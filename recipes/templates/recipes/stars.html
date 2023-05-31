@@ -51,8 +51,6 @@
           const jsonData = await res.json()
         console.log(jsonData)
     return jsonData[0]
-    // TODO: this is where you handle if it fails or if it succeeds. modify page to let user know what happened after clicking. also if success, remove eventlisteners
-              // TODO: maybe make the css only load if the user is logged in as well. alternatively change css with event listener. Can use the data-value of the spans based to determine how many stars you highlight with gold. 
     }
   if (userIsLoggedIn) {
         let mouseoverListeners = []

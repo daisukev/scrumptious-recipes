@@ -26,7 +26,6 @@ def recipe_list(request):
     paginator = Paginator(recipes, 9)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    # TODO: Implement the ratings for the list view
     context = {
             "recipe_list": page_obj,
             "view": "all_recipes"
@@ -111,6 +110,7 @@ def create_recipe(request):
     }
     return render(request, "recipes/create.html", context)
 
+@login_required
 def edit_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if request.method == "POST":

@@ -36,14 +36,6 @@ Scrumptious Recipes - {{ recipe.title }}
   </tbody>
 </table>
 <h2>Steps</h2>
-<ol>
-  <li>Blanch the green beans</li>
-  <li>Grill the green beans and the ears of corn</li>
-  <li>Chop the green beans</li>
-  <li>Slice the corn off the cob</li>
-  <li>Grill the tortillas</li>
-  <li>Assemble the tacos with veggies, salsa, and cheese</li>
-</ol>
   <ol>
   {% for step in recipe.steps.all %}
     <li>{{step.instruction}}</li>
