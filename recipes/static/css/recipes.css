@@ -14,7 +14,7 @@ html,body {
   --light-grey-color: #EAE8E7;
   --ultra-light-grey-color: #F7F7F7;
   --img-width: 320px;
-  --max-width: 1100px;
+  --width: min (1100px, 100% -3rem);
   background: var(--background-color);
   color: var(--text-color);
 }
@@ -36,6 +36,7 @@ footer {
 .footer-content {
   padding-block: 1rem;
   padding-inline: 1rem;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -152,7 +153,6 @@ textarea#id_description{
 }
 
 header{
-  background: white;
   border-bottom: 2px solid var(--red-color);
   box-shadow: 2px 2px 10px rgb(0 0 0 / 0.2);
   margin:0;
@@ -163,7 +163,9 @@ header{
   grid-template-columns: 1fr auto;
   align-items: end;
   width: 100%;
+  max-width: 1100px;
   padding: 0;
+  margin: 0 auto;
 }
 .header-content h1{
   flex-grow: 1;
@@ -185,7 +187,8 @@ nav ul li{
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  max-width: min(1100px, 95%);
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 1rem;
   margin: 0 auto;
 }
@@ -246,20 +249,6 @@ nav ul li{
     object-fit: cover;
 }
 }
-  
-@media (max-width: 844px) {
-  .recipe-item{
-    width: 95%;
-    display:grid;
-  }
-}
-@media (max-width: 544px) {
-  .recipe-item-lower{
-    display:grid;
-    grid-template-rows: auto 1fr auto auto;
-    padding: 0.5rem;
-  }
-}
 
 
 .stars-container{
@@ -299,9 +288,6 @@ nav ul li{
   background-clip: text;
   /* -webkit-text-fill-color: transparent; */
 }
-.recipe-img{
-  max-width: 90vw;
-}
 
 th, caption{
   text-align: left;
@@ -312,13 +298,35 @@ caption{
 }
 
 .recipe-detail {
+  /* max-width: var(--max-width); */
+  width: var(--width);
+  max-width: 1100px;
+  margin: 0 auto;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   padding: 1rem;
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.recipe-img-container{
+  grid-column: 1/ span 2;
+}
+.recipe-header{
+  grid-column: 1/ span 3
+}
+.recipe-content{
+  grid-column: 1/ span 5;
+}
+
+.recipe-img{
+  width: 100%;
 }
 .user-links{
   display: grid;
   grid-template-columns: autofill;
   align-items: end;
-  margin: 0;
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 0;
 }
 .user-links a{
@@ -341,4 +349,24 @@ caption{
 }
 .user-links li:not(:last-of-type)::after{
   content: " - ";
+}
+.description{
+  font-size: 1.1rem;
+  line-height: 1.5rem;
+  color: var(--grey-color);
+}
+
+  
+@media (max-width: 844px) {
+  .recipe-item{
+    width: 95%;
+    display:grid;
+  }
+}
+@media (max-width: 644px) {
+  .recipe-item-lower{
+    display:grid;
+    grid-template-rows: auto 1fr auto auto;
+    padding: 0.5rem;
+  }
 }

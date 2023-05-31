@@ -8,6 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 
+def can_edit_object(user, obj): # obj being any model in this app. i.e. recipe or rating
+    return user.is_authenticated and (user.is_staff or user == obj.author)
+
+def user_can_edit_recipe(function):
+    pass
+
 # Given an id number, this shows the corresponding recipe
 # from the database.
 def show_recipe(request, id):
@@ -110,6 +116,7 @@ def create_recipe(request):
     }
     return render(request, "recipes/create.html", context)
 
+## TODO: Views like this should be gated by the user. Only the user who is 
 @login_required
 def edit_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
