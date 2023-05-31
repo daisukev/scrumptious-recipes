@@ -65,24 +65,15 @@
       const mouseoutListener = (event) =>{
         setStars(initialRating)
       }
+      {% if user.is_authenticated %}  
       const clickListener = (event)=>{
           value = star.dataset.value[0]
 
-                    if(addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value) ){
-              setStars(initialRating)
-        }
-
-              <!-- // remove all event listeners -->
-              <!-- mouseoverListeners.forEach(({star, mouseoverListener})=>{ -->
-              <!--   star.removeEventListener("mouseover", mouseoverListener) -->
-              <!-- }) -->
-              <!-- mouseoutListeners.forEach(({star, mouseoutListener})=>{ -->
-              <!--   star.removeEventListener("mouseout", mouseoutListener) -->
-              <!-- }) -->
-              <!-- clickListeners.forEach(({star, clickListener})=>{ -->
-              <!--   star.removeEventListener("click", clickListener) -->
-              <!-- }) -->
-          }    
+              if(addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value) ){
+              setStars(initialRating) 
+        } 
+      }    
+    {% endif %}
       
       star.addEventListener("mouseover", mouseoverListener)
       star.addEventListener("mouseout", mouseoutListener)
