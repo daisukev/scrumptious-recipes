@@ -18,9 +18,7 @@ Scrumptious Recipes - {{ recipe.title }}
       on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
     </p>
   </div>
-    <div class="recipe-img-container">
-    <img class="recipe-img" src="{{recipe.picture.url}}" />
-    </div>
+
   <div class="recipe-content">
 
     {% include 'recipes/rating.html' %}
