@@ -17,6 +17,7 @@ Scrumptious Recipes - {{ recipe.title }}
       {%endif%}
       on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
     </p>
+  <img src="{{ recipe.picture.url }}" alt="">
   </div>
 
   <div class="recipe-content">

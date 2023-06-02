@@ -50,8 +50,8 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    picture = models.ImageField(upload_to="images")
-    thumbnail = models.ImageField(upload_to="thumbnails", default ='https://placehold.co/300x225')
+    picture = models.ImageField(upload_to="images/")
+    thumbnail = models.ImageField(upload_to="thumbnails/", default ='https://placehold.co/300x225')
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -95,16 +95,13 @@ class Recipe(models.Model):
         thumb_width =  380
 
         # check dimensions of the picture
-        print(thumb_img.width, thumb_img.height)
         if thumb_img.height >= thumb_img.width: # if it's a tall image, we want the thumbnail size  to adhere to the width, so the height is set arbitrarily large
             # height * thumbnail width / img_width
             target_height  = int(thumb_img.height * thumb_width / thumb_img.width)
             thumbnail_size = (thumb_width, target_height)
-            print("tall image: ", thumbnail_size)
         else:
             target_width = int((thumb_height * thumb_img.width) / thumb_img.height)
             thumbnail_size = (target_width, thumb_height)
-            print("wide image: ", thumbnail_size)
 
 
         thumb_img.thumbnail(thumbnail_size) # shrink it
