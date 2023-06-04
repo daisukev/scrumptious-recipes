@@ -3,14 +3,43 @@
   Scrumptious Recipes - Create Recipe
 {% endblock title %}
 {% block content %}
-  <main>
+  <main class="content-container">
   <form enctype= "multipart/form-data" method="post">
     {% csrf_token %}
       {{ form.as_p }}
+      {{ formset.management_form }}
+      {% for form in formset %}
+        <div class="formset">
+          {{ form }}
+        </div>
+        <button id="add-ingredient" type="button">Add Ingredient</button>
+      {% endfor %}
 
     <button>Save</button>
   </form>
   </main>
 {% endblock content %}
 
+  {% block scripts %}
+<script>
+  const addButton = document.getElementById('add-ingredient');
+  const formsetCountInput = document.getElementsByName('form-TOTAL_FORMS')[0];
+  let formsetCount = parseInt(formsetCountInput.value);
+
+  addButton.addEventListener('click', (event) => {
+    const formsetForms = document.querySelectorAll('.formset');
+    const lastFormsetForm = formsetForms[formsetForms.length - 1];
+    const emptyForm = `
+      <div class="formset">
+        {{ formset.empty_form }}
+      </div>
+    `;
+
+    const formHtml = emptyForm.replace(/__prefix__/g, formsetCount)
+    lastFormsetForm.insertAdjacentHTML('afterend', formHtml);
+    formsetCount++
+    formsetCountInput.value = formsetCount.toString()
+  });
+</script>
+{% endblock scripts %}
 

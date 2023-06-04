@@ -17,7 +17,9 @@ Scrumptious Recipes - {{ recipe.title }}
       {%endif%}
       on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
     </p>
-  <img src="{{ recipe.picture.url }}" alt="">
+    <div class="main-picture-container">
+    </div>
+    <img src="{{ recipe.picture.url }}" class="main-picture" alt="A picture of {{recipe.title}}">
   </div>
 
   <div class="recipe-content">
@@ -28,15 +30,15 @@ Scrumptious Recipes - {{ recipe.title }}
       <caption>Ingredients List</caption>
       <thead>
         <tr>
-          <th>Amount</th>
+          <th class ="header-amount">Amount</th>
           <th>Food item</th>
         </tr>
       </thead>
       <tbody>
         {% for ingredient in recipe.ingredients.all %}
         <tr>
-          <td>{{ingredient.amount}}</td>
-          <td>{{ingredient.food_item}}</td>
+          <td class="ingredient-amount">{{ingredient.amount}}</td>
+          <td class="ingredient-food-item">{{ingredient.food_item}}</td>
         </tr>
         {% endfor %}
       </tbody>

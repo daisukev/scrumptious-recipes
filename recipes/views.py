@@ -6,7 +6,9 @@ from .forms import RecipeForm, RatingForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.forms import formset_factory
+from .forms import IngredientForm
+from .models import Ingredient
 
 def can_edit_object(user, obj): # obj being any model in this app. i.e. recipe or rating
     return user.is_authenticated and (user.is_staff or user == obj.author)
@@ -98,21 +100,37 @@ def create_rating(request,recipe_id, user_id):
 
 @login_required
 def create_recipe(request):
+    IngredientFormSet = formset_factory(IngredientForm, extra=1)
+    # it should exclude the recipe in the formset as it should automatically save to the one we're working on right now.
+
+
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
+        formset = IngredientFormSet(request.POST)
+
         if form.is_valid():
             # don't save immediately
-            recipe = form.save(False)
+            recipe = form.save(commit=False)
             # edit field 
             recipe.author = request.user
+            print(recipe)
             # save entry
             recipe.save()
+            if formset.is_valid():
+                for form in formset:
+                    print(form)
+                    ingredient_form = form.save(commit=False)
+                    print('cleaned data: ',form.cleaned_data)
+                    ingredient_form.recipe = recipe
+                    ingredient_form.save()
             # form.save()
-        return redirect(recipe_list)
+        return redirect('recipe_list')
     else:
         form = RecipeForm()
+        formset = IngredientFormSet()
     context = {
-        "form": form
+        "form": form,
+        "formset": formset,
     }
     return render(request, "recipes/create.html", context)
 

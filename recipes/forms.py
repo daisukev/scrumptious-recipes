@@ -1,7 +1,7 @@
-from django.forms import ModelForm, formset_factory
+from django.forms import ModelForm
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .models import Recipe,Rating
+from .models import Recipe,Rating, Ingredient
 
 class RecipeForm(ModelForm):
     class Meta:
@@ -21,4 +21,11 @@ class RatingForm(ModelForm):
                 "recipe",
                 "author",
                 )
+
+class IngredientForm(ModelForm):
+    class Meta:
+        model = Ingredient
+        fields = "__all__"
+        exclude = ['recipe']
+
 

@@ -86,15 +86,32 @@ h2{
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
 }
-.ingredients-table{
+.ingredients-table {
   border-collapse: collapse;
-  width: 100%;
+  grid-template-columns: subgrid;
+  grid-column: 1/ span 3;
+  width: min(400px, 100%);
+  padding: 1rem;
 }
-.ingredients-table > td, th{
-  padding-block: 0.5rem;
+.ingredient-amount{
+  text-align: right;
+  padding-inline: 0.5rem;
+  width: 9ch;
+}
+.ingredient-food-item{
+  padding-inline: 0.5rem;
+}
+
+
+.ingredients-table > td, th, tr{
+  border-radius: 20px;
+  padding-inline: 0.5rem;
 }
 .ingredients-table > caption, th{
   text-align: left;
+}
+.header-amount{
+  text-align: right;
 }
 .ingredients-table > caption{
   font-weight: 700;
@@ -357,6 +374,30 @@ nav ul li{
   font-size: 1.1rem;
   line-height: 1.5rem;
   color: var(--grey-color);
+}
+
+.main-picture-container {
+  grid-template-columns: subgrid;
+  grid-column: 1/3;
+
+}
+
+.main-picture {
+  width: 100%;
+}
+
+.formset{
+  /* display: flex; */
+  padding-block: 1rem;
+}
+.formset > * {
+  padding-block: 0.5rem;
+}
+.formset > label{
+  padding-right: 1rem;
+}
+.formset > label:not(:first-child){
+  padding-left: 1rem;
 }
 
   

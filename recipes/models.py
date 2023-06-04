@@ -4,7 +4,6 @@ import os
 from django.core.files import File
 from io import BytesIO
 from django.core.validators import MaxValueValidator, MinValueValidator
-# from django.forms import ModelForm
 from django.db.models import Avg
 from .helpers.average_rating import average_rating
 from django.conf import settings
@@ -110,7 +109,6 @@ class Recipe(models.Model):
         # file formats 
         thumb_img.save(thumb_data, format=thumb_img.format)   # save the thumbnail same filetype as the original
         thumb_img.close() # close the image
-        ## TODO: strip the original file extension
         stripped_picture_path = os.path.basename(os.path.splitext(str(self.picture))[0])
 
         print(stripped_picture_path)
