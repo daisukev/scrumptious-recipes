@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, render, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from .models import Recipe, Rating
-from .forms import RecipeForm, RatingForm
+from .forms import RecipeForm, RatingForm, RecipeStepForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -102,11 +102,16 @@ def create_rating(request,recipe_id, user_id):
 def create_recipe(request):
     IngredientFormSet = formset_factory(IngredientForm, extra=1)
     # it should exclude the recipe in the formset as it should automatically save to the one we're working on right now.
+    RecipeStepFormSet = formset_factory(RecipeStepForm, extra=1)
 
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
-        formset = IngredientFormSet(request.POST)
+        ingredients_formset = IngredientFormSet(request.POST, prefix="ingredients")
+        recipe_steps_formset = RecipeStepFormSet(request.POST, prefix="recipe-steps")
+
+        # TODO: Rename formset to IngredientFormSet here and in the create.html template
+        # https://docs.djangoproject.com/en/4.2/topics/forms/formsets/#using-more-than-one-formset-in-a-view
 
         if form.is_valid():
             # don't save immediately
@@ -116,21 +121,29 @@ def create_recipe(request):
             print(recipe)
             # save entry
             recipe.save()
-            if formset.is_valid():
-                for form in formset:
+            if ingredients_formset.is_valid():
+                for form in ingredients_formset:
                     print(form)
                     ingredient_form = form.save(commit=False)
                     print('cleaned data: ',form.cleaned_data)
                     ingredient_form.recipe = recipe
                     ingredient_form.save()
+            if recipe_steps_formset.is_valid():
+                for form in recipe_steps_formset:
+                    recipe_steps_form = form.save(commit=False)
+                    print('cleaned data: ',form.cleaned_data)
+                    recipe_steps_form.recipe = recipe
+                    recipe_steps_form.save()
             # form.save()
         return redirect('recipe_list')
     else:
         form = RecipeForm()
-        formset = IngredientFormSet()
+        ingredients = IngredientFormSet(prefix="ingredients")
+        recipe_steps = RecipeStepFormSet(prefix="recipe-steps")
     context = {
         "form": form,
-        "formset": formset,
+        "ingredients": ingredients,
+        "recipe_steps": recipe_steps,
     }
     return render(request, "recipes/create.html", context)
 

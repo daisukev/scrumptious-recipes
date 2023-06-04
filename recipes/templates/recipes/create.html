@@ -7,39 +7,72 @@
   <form enctype= "multipart/form-data" method="post">
     {% csrf_token %}
       {{ form.as_p }}
-      {{ formset.management_form }}
-      {% for form in formset %}
-        <div class="formset">
+      {{ ingredients.management_form }}
+      {% for form in ingredients %}
+        <div class="ingredients-formset">
           {{ form }}
         </div>
-        <button id="add-ingredient" type="button">Add Ingredient</button>
+      <!-- Hidden Block to Store Empty Form HTML -->
+      {% block empty_form %}
+        <div id="ingredients-empty-form" style="display: none;">
+          {{ ingredients.empty_form }}
+        </div>
+      {% endblock empty_form %}
+      
+        <button id="add-ingredients" type="button">Add Ingredient</button>
       {% endfor %}
 
+      {{ recipe_steps.management_form}}
+      {% for form in recipe_steps %}
+      <div class="recipe-steps-formset">
+        {{ form }}
+      </div>
+        <div id="recipe-steps-empty-form" style="display: none;">
+          {{ recipe_steps.empty_form }}
+        </div>
+      {% endfor %}
+        <button id="add-recipe-steps" type="button">Add Step</button>
+
+        <div>
     <button>Save</button>
+        </div>
   </form>
   </main>
 {% endblock content %}
 
   {% block scripts %}
 <script>
-  const addButton = document.getElementById('add-ingredient');
-  const formsetCountInput = document.getElementsByName('form-TOTAL_FORMS')[0];
-  let formsetCount = parseInt(formsetCountInput.value);
+  {% comment %} TODO: Make this a generic function 
+  add-ingredient should be something like 'buttonId' 
+  formset will be a literal string while adding the formsetPrefix= recipe-step and ingredients
+  the formset querySelectorAll will have to be different as well. perhaps prefix-formset or something
 
-  addButton.addEventListener('click', (event) => {
-    const formsetForms = document.querySelectorAll('.formset');
+  {% endcomment %}
+  function addFormset(prefix){
+
+  const addButton = document.getElementById(`add-${prefix}`);
+  const formsetCountInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    console.log(formsetCountInput.value)
+  let formsetCount = parseInt(formsetCountInput.value)
+
+  addButton.addEventListener('click', (event) => {//shouldn't work yet
+    console.log(`${prefix}-click`)
+    const formsetForms = document.querySelectorAll(`.${prefix}-formset`);
     const lastFormsetForm = formsetForms[formsetForms.length - 1];
-    const emptyForm = `
-      <div class="formset">
-        {{ formset.empty_form }}
-      </div>
-    `;
+    // id="id_${prefix}__prefix__-instruction"
+    const emptyForm = document.getElementById(`${prefix}-empty-form`).innerHTML;
+
+    console.log(emptyForm)
 
     const formHtml = emptyForm.replace(/__prefix__/g, formsetCount)
     lastFormsetForm.insertAdjacentHTML('afterend', formHtml);
     formsetCount++
     formsetCountInput.value = formsetCount.toString()
   });
+
+  }
+  addFormset('ingredients')
+  addFormset('recipe-steps')
 </script>
 {% endblock scripts %}
 
