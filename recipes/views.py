@@ -101,7 +101,6 @@ def create_rating(request,recipe_id, user_id):
 @login_required
 def create_recipe(request):
     IngredientFormSet = formset_factory(IngredientForm, extra=1)
-    # it should exclude the recipe in the formset as it should automatically save to the one we're working on right now.
     RecipeStepFormSet = formset_factory(RecipeStepForm, extra=1)
 
 
@@ -110,8 +109,6 @@ def create_recipe(request):
         ingredients_formset = IngredientFormSet(request.POST, prefix="ingredients")
         recipe_steps_formset = RecipeStepFormSet(request.POST, prefix="recipe-steps")
 
-        # TODO: Rename formset to IngredientFormSet here and in the create.html template
-        # https://docs.djangoproject.com/en/4.2/topics/forms/formsets/#using-more-than-one-formset-in-a-view
 
         if form.is_valid():
             # don't save immediately
@@ -150,94 +147,47 @@ def create_recipe(request):
 ## TODO: Views like this should be gated by the user. Only the user who is 
 @login_required
 def edit_recipe(request, id):
+    IngredientFormSet = formset_factory(IngredientForm, extra=1)
+    RecipeStepFormSet = formset_factory(RecipeStepForm, extra=1)
     recipe = get_object_or_404(Recipe, id=id)
     if request.method == "POST":
         form = RecipeForm(request.POST,request.FILES, instance=recipe)
+        
         if form.is_valid():
-            form.save()
+            ingredients_formset = IngredientFormSet(request.POST, prefix="ingredients")
+            recipe_steps_formset = RecipeStepFormSet(request.POST, prefix="recipe-steps")
+        
+            # don't save immediately
+            recipe = form.save(commit=False)
+            # edit field 
+            recipe.author = request.user
+            print(recipe)
+            # save entry
+            recipe.save()
+            if ingredients_formset.is_valid():
+                for form in ingredients_formset:
+                    print(form)
+                    ingredient_form = form.save(commit=False)
+                    print('cleaned data: ',form.cleaned_data)
+                    ingredient_form.recipe = recipe
+                    ingredient_form.save()
+            if recipe_steps_formset.is_valid():
+                for form in recipe_steps_formset:
+                    recipe_steps_form = form.save(commit=False)
+                    print('cleaned data: ',form.cleaned_data)
+                    recipe_steps_form.recipe = recipe
+                    recipe_steps_form.save()
         return redirect("show_recipe", id=id)
     else:
         form = RecipeForm(instance=recipe)
+        ingredients_data = [{"amount": i.amount, "food_item": i.food_item} for i in recipe.ingredients.all()]
+        ingredients = IngredientFormSet(prefix="ingredients", initial=ingredients_data)
+        print(recipe.steps.all())
+        recipe_steps = RecipeStepFormSet(prefix="recipe-steps", initial=recipe)
         context ={
                 "recipe_object": recipe,
                 "form": form,
+                "ingredients": ingredients,
+                "recipe_steps": recipe_steps,
                 }
-        return render(request, "recipes/edit.html", context)
-
-
-# def edit_post (request, id):
-#     post = get_object_or_404(Post, id=id)
-#     if request.method == "POST":
-#         form = PostForm(request. POST, instance=post)
-#         if form.is_valid():
-#             form.save ()
-# # redirect back to the page that shows
-# # the post
-#         return redirect ("show_post", id=id)
-#     else:
-#         form = PostForm (instance=post)
-#         context = {
-#             "post_object": post,
-#             "post_form": form,
-#         }
-#     return render (request, "posts/edit.html", context)
-
-from datetime import datetime
-def show_exercise(request, id):
-    # !!!!!
-    # DO NOT CHANGE ANY OF THE FOLLOWING CODE
-    # !!!!!
-
-    # Add id to exercise template path to locate specific template
-    template_name = "exercises/exercise-" + str(id) + ".html"
-
-    # Store multiple context dictionaries in a single list for easy access
-    context_list = [
-        {
-            "date": datetime.now(),
-            "image": "", # LEAVE THIS STRING EMPTY
-            "mangled_content": "tHiS mESsaGe Is iN A ruDe tOne",
-        },
-        {
-            "numbers": [1, 2, 3, 4, 5],
-            "attendees": [
-                {
-                    "first_name": "Mike",
-                    "last_name": "Wazowski",
-                },
-                {
-                    "first_name": "James",
-                    "last_name": "Sullivan",
-                },
-                {
-                    "first_name": "Randall",
-                    "last_name": "Boggs",
-                },
-            ],
-        },
-        {
-            "employees": [
-                {
-                    "first_name": "Roz",
-                    "last_name": "",
-                    "created_on": datetime.now(),
-                    "roles": ["Key master of the scare floor", "Head of the CDA"],
-                },
-                {
-                    "first_name": "Celia",
-                    "last_name": "Mae",
-                    "created_on": datetime.now(),
-                    "roles": ["Receptionist", "Floor supervisor"],
-                },
-                {
-                    "first_name": "Boo",
-                    "last_name": "",
-                    "created_on": datetime.now(),
-                    "roles": [],
-                },
-            ],
-        }
-    ]
-
-    # Render exercise and use correct context based on location in the context_list
-    return render(request, template_name, context_list[id - 1])
+        return render(request, "recipes/create.html", context)

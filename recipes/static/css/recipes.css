@@ -84,7 +84,7 @@ h2{
 .recipe-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
 }
 .ingredients-table {
   border-collapse: collapse;
@@ -420,4 +420,114 @@ nav ul li{
     margin-bottom: 2rem;
   }
 
+}
+
+input,
+textarea,
+select,
+button {
+  width: min(400px, 100%);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 5px rgb(0 0 0 / 0.3);
+  line-height: 1.5rem;
+}
+input, textarea, select{
+  outline: none;
+  border: 2px solid var(--ultra-light-grey-color);
+}
+button{
+  border: 0px;
+}
+input[type="file"] {
+  display:none;
+}
+label[for="id_picture"]
+{
+  cursor: pointer;
+}
+label[for="id_picture"]::after
+{
+  content: " 📁"
+}
+label{
+  margin-block: 1rem;
+}
+input{
+  height: 1.8rem;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+textarea{
+  height: 4.8rem;
+  font-size: 1.2rem;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+button {
+  height: 2rem;
+  width: min(180px, 100%);
+  font-size: 1.1rem;
+  padding: 0.25rem;
+  margin-block: 1rem;
+  background:var(--red-color);
+  color: var(--background-color);
+  transition: 60ms ease-in-out;
+}
+
+button:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  filter: drop-shadow(3px 3px var(--grey-color));
+}
+button:active{
+  filter: grayscale(20%);
+  transform: scale(.95);
+}
+
+#img-upload{
+  display:none;
+}
+
+.ingredients-formset{
+  width: min(600px, 100%);
+}
+.ingredients-formset label{
+  height: 1.5rem;
+}
+.ingredients-formset input{
+}
+.ingredients-formset  button{
+}
+textarea:focus, 
+input:focus{
+  outline: 2px solid var(--red-color);
+}
+button:focus{
+  outline: 2px solid var(--text-color);
+}
+.ingredients-form{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
+}
+.ingredients-form label{
+  grid-row: 1;
+  padding-block: 0;
+  margin: 0;
+  margin-top: 1rem;
+}
+.ingredients-form input{
+  grid-row: 2;
+  width: 200px;
+}
+.ingredients-form button{
+  grid-row: 2;
+  grid-column: 3;
+  margin: 0;
+  margin-left: 1rem;
+  width: 100px;
+  height: 2.5rem;
 }

@@ -1,78 +1,139 @@
-{% extends 'base.html' %}
-{% block title %}
-  Scrumptious Recipes - Create Recipe
-{% endblock title %}
-{% block content %}
-  <main class="content-container">
-  <form enctype= "multipart/form-data" method="post">
+{% extends 'base.html' %} {% block title %} Scrumptious Recipes - Create Recipe
+{% endblock title %} {% block content %}
+<main class="content-container">
+  <form enctype="multipart/form-data" method="post">
     {% csrf_token %}
-      {{ form.as_p }}
-      {{ ingredients.management_form }}
-      {% for form in ingredients %}
-        <div class="ingredients-formset">
-          {{ form }}
+    <label for="{{form.title.id_for_label}}">Title</label>
+    {{form.title}}
+    <label for="{{form.picture.id_for_label}}">Picture</label>
+    <img id="img-upload" style="width: min(300px, 100%)" />
+    {{form.picture}}
+    <label for="{{form.description.id_for_label}}">Description</label>
+    {{form.description}}
+    <h3>Add Ingredients</h3>
+    {{ ingredients.management_form }} {% for form in ingredients %}
+    <div class="ingredients-formset">
+        <div class="ingredients-form">
+          {{ form}}
         </div>
-      <!-- Hidden Block to Store Empty Form HTML -->
-      {% block empty_form %}
-        <div id="ingredients-empty-form" style="display: none;">
-          {{ ingredients.empty_form }}
-        </div>
-      {% endblock empty_form %}
-      
-        <button id="add-ingredients" type="button">Add Ingredient</button>
-      {% endfor %}
+    </div>
+    <!-- Hidden Block to Store Empty Form HTML -->
+    <div id="ingredients-empty-form" style="display: none">
+      {{ ingredients.empty_form}}
+    </div>
 
-      {{ recipe_steps.management_form}}
-      {% for form in recipe_steps %}
-      <div class="recipe-steps-formset">
-        {{ form }}
-      </div>
-        <div id="recipe-steps-empty-form" style="display: none;">
-          {{ recipe_steps.empty_form }}
-        </div>
-      {% endfor %}
-        <button id="add-recipe-steps" type="button">Add Step</button>
+    <button id="add-ingredients" type="button">Add Ingredient</button>
+    {% endfor %}
 
-        <div>
-    <button>Save</button>
-        </div>
+    <h3>Add Instructions</h3>
+    {{ recipe_steps.management_form}} {% for form in recipe_steps %}
+    <div class="recipe-steps-formset">{{ form }}</div>
+    <div id="recipe-steps-empty-form" style="display: none">
+      {{ recipe_steps.empty_form }}
+    </div>
+    {% endfor %}
+    <button id="add-recipe-steps" type="button">Add Step</button>
+
+    <div>
+      <button>Save</button>
+    </div>
   </form>
-  </main>
-{% endblock content %}
+</main>
+{% endblock content %} {% block scripts %}
 
-  {% block scripts %}
 <script>
-  {% comment %} TODO: Make this a generic function 
-  add-ingredient should be something like 'buttonId' 
-  formset will be a literal string while adding the formsetPrefix= recipe-step and ingredients
-  the formset querySelectorAll will have to be different as well. perhaps prefix-formset or something
+  document.getElementById("id_picture").onchange = function () {
+    let src = URL.createObjectURL(this.files[0]);
+    document.getElementById("img-upload").src = src;
+    document.getElementById("img-upload").style =
+      "display: block; width: min(400px, 100%);";
+  };
 
-  {% endcomment %}
-  function addFormset(prefix){
+  function formsetManager(prefix){
+    const addButton = document.getElementById(`add-${prefix}`);
+    const formsetCountInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    let formsetCount = parseInt(formsetCountInput.value);
 
-  const addButton = document.getElementById(`add-${prefix}`);
-  const formsetCountInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-    console.log(formsetCountInput.value)
-  let formsetCount = parseInt(formsetCountInput.value)
+    function addFormset(){
 
-  addButton.addEventListener('click', (event) => {//shouldn't work yet
-    console.log(`${prefix}-click`)
-    const formsetForms = document.querySelectorAll(`.${prefix}-formset`);
-    const lastFormsetForm = formsetForms[formsetForms.length - 1];
-    // id="id_${prefix}__prefix__-instruction"
-    const emptyForm = document.getElementById(`${prefix}-empty-form`).innerHTML;
+      const formsetForms = document.querySelectorAll(`.${prefix}-formset`);
+      const lastFormsetForm = formsetForms[formsetForms.length - 1];
 
-    console.log(emptyForm)
+      const emptyForm = document.getElementById(
+        `${prefix}-empty-form`
+      ).innerHTML;
+      const formHtml = emptyForm.replace(/__prefix__/g, formsetCount);
+      const parentDiv = document.createElement("div");
+      parentDiv.type = "div";
+      parentDiv.innerHTML = formHtml;
+      parentDiv.classList.add(`${prefix}-form`);
+      lastFormsetForm.appendChild(parentDiv);
 
-    const formHtml = emptyForm.replace(/__prefix__/g, formsetCount)
-    lastFormsetForm.insertAdjacentHTML('afterend', formHtml);
-    formsetCount++
-    formsetCountInput.value = formsetCount.toString()
-  });
+      formsetCount++;
+      formsetCountInput.value = formsetCount.toString();
+      const formSet = document.getElementsByClassName(`${prefix}-form`);
+      const lastForm = formSet[formSet.length - 1];
+      addRemoveButton(lastForm, prefix);
+    }
 
+    function addRemoveButton(formsetForm){
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.textContent = "Remove";
+      formsetForm.appendChild(removeButton);
+    }
+    
+    function handleFormsetClick(event) {
+      const target = event.target;
+      if (target.tagName === 'BUTTON' && target.textContent === 'Remove') {
+        const formsetForm = target.closest(`.${prefix}-form`);
+        if(formsetForm){
+
+          formsetForm.remove();
+          formsetCount--;
+
+          <!-- const formValues = []; -->
+          <!-- const formSet = document.getElementsByClassName(`${prefix}-form`); -->
+          <!-- for(let i = 0; i < formSet.length; i++){ -->
+          <!--   formValues.push(formSet[i].querySelectorAll('input, textarea')) -->
+          <!-- } -->
+          <!-- console.log('formValues:', formValues) -->
+
+          <!-- const formInputs = formSet.querySelectorAll('input, textarea'); -->
+
+          // should store all the values of the inputs so they don't disappear when you remove a form
+          resetNumbers();
+
+        }
+      }
+    }
+    function resetNumbers(){
+      const formset = document.getElementsByClassName(`${prefix}-form`);
+      <!-- console.log(formset); -->
+      const formArray = Array.from(formset);
+      console.log(formArray)
+
+      for(let i= 0; i < formset.length; i++){
+        modifiedHTML = formset[i].innerHTML
+        const pattern = new RegExp(`${prefix}-(\\d+)`, 'g');
+        modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}` )
+        formset[i].innerHTML = modifiedHTML
+      }
+
+      totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+      totalForms.value = formset.length;
+
+    }
+    
+    addButton.addEventListener("click", addFormset);
+    document.addEventListener("click", handleFormsetClick);
+
+    return{
+      addRemoveButton,
+      resetNumbers
+    }
   }
-  addFormset('ingredients')
-  addFormset('recipe-steps')
+  ingredientsFormManager = formsetManager('ingredients')
+  recipeStepsManager = formsetManager('recipe-steps')
 </script>
 {% endblock scripts %}
-
