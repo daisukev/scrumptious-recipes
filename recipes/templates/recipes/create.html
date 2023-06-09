@@ -97,7 +97,6 @@
           formsetForm.remove();
           formsetCount--;
 
-          // TODO: Removing the form and resetting the numbers should NOT remove the data a user has already inputted. 
 
           resetNumbers();
 
@@ -107,13 +106,34 @@
     function resetNumbers(){
       const formset = document.getElementsByClassName(`${prefix}-form`);
 
+      // store the values 
+      let formValues =[] 
+      for(let i = 0; i < formset.length; i++){
+        inputs = formset[i].querySelectorAll('input, textarea')
+        formValues.push(inputs)
+      }
+      console.log(formValues)
+
+
       for(let i= 0; i < formset.length; i++){
         modifiedHTML = formset[i].innerHTML
         const pattern = new RegExp(`${prefix}-(\\d+)`, 'g');
         modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}-` )
         formset[i].innerHTML = modifiedHTML
       }
-      // Recipe steps is decremting by two for some reason. 
+
+      // put the values back.
+      for(let i = 0; i < formset.length; i++){
+        inputs = formset[i].querySelectorAll('input, textarea')
+        for(let j= 0; j < formValues[i].length; j++){
+          inputs[j].value = formValues[i][j].value
+        }
+
+
+      }
+
+
+
       totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
       totalForms.value = formset.length;
 
@@ -121,6 +141,8 @@
     
     addButton.addEventListener("click", addFormset);
     document.addEventListener("click", handleFormsetClick);
+
+    // TODO: add remove buttons to existing items. 
 
     return{
       addRemoveButton,

@@ -472,7 +472,8 @@ button {
   font-size: 1.1rem;
   padding: 0.25rem;
   margin-block: 1rem;
-  background:var(--red-color);
+  /* background:var(--red-color); */
+  background:var(--green-color);
   color: var(--background-color);
   transition: 60ms ease-in-out;
 }

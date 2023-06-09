@@ -53,6 +53,7 @@ def my_recipe_list(request):
     return render(request, "recipes/list.html", context)
 
 
+
 # This handles creation and editing of ratings.
 @login_required
 def create_rating(request,recipe_id, user_id):
