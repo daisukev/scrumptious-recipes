@@ -11,28 +11,33 @@
     <label for="{{form.description.id_for_label}}">Description</label>
     {{form.description}}
     <h3>Add Ingredients</h3>
-    {{ ingredients.management_form }} {% for form in ingredients %}
+    {{ ingredients.management_form }} 
     <div class="ingredients-formset">
+    {% for form in ingredients %}
         <div class="ingredients-form">
           {{ form}}
         </div>
+    {% endfor %}
     </div>
     <!-- Hidden Block to Store Empty Form HTML -->
     <div id="ingredients-empty-form" style="display: none">
       {{ ingredients.empty_form}}
     </div>
-
     <button id="add-ingredients" type="button">Add Ingredient</button>
-    {% endfor %}
 
     <h3>Add Instructions</h3>
-    {{ recipe_steps.management_form}} {% for form in recipe_steps %}
-    <div class="recipe-steps-formset">{{ form }}</div>
-    <div id="recipe-steps-empty-form" style="display: none">
+    {{ recipe_steps.management_form}}
+    <div class="recipe_steps-formset">
+    {% for form in recipe_steps %}
+      <div class="recipe_steps-form">
+      {{ form }}
+      </div>
+    {% endfor %}
+    </div>
+    <div id="recipe_steps-empty-form" style="display: none">
       {{ recipe_steps.empty_form }}
     </div>
-    {% endfor %}
-    <button id="add-recipe-steps" type="button">Add Step</button>
+    <button id="add-recipe_steps" type="button">Add Step</button>
 
     <div>
       <button>Save</button>
@@ -92,16 +97,8 @@
           formsetForm.remove();
           formsetCount--;
 
-          <!-- const formValues = []; -->
-          <!-- const formSet = document.getElementsByClassName(`${prefix}-form`); -->
-          <!-- for(let i = 0; i < formSet.length; i++){ -->
-          <!--   formValues.push(formSet[i].querySelectorAll('input, textarea')) -->
-          <!-- } -->
-          <!-- console.log('formValues:', formValues) -->
+          // TODO: Removing the form and resetting the numbers should NOT remove the data a user has already inputted. 
 
-          <!-- const formInputs = formSet.querySelectorAll('input, textarea'); -->
-
-          // should store all the values of the inputs so they don't disappear when you remove a form
           resetNumbers();
 
         }
@@ -109,17 +106,14 @@
     }
     function resetNumbers(){
       const formset = document.getElementsByClassName(`${prefix}-form`);
-      <!-- console.log(formset); -->
-      const formArray = Array.from(formset);
-      console.log(formArray)
 
       for(let i= 0; i < formset.length; i++){
         modifiedHTML = formset[i].innerHTML
         const pattern = new RegExp(`${prefix}-(\\d+)`, 'g');
-        modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}` )
+        modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}-` )
         formset[i].innerHTML = modifiedHTML
       }
-
+      // Recipe steps is decremting by two for some reason. 
       totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
       totalForms.value = formset.length;
 
@@ -134,6 +128,6 @@
     }
   }
   ingredientsFormManager = formsetManager('ingredients')
-  recipeStepsManager = formsetManager('recipe-steps')
+  recipeStepsManager = formsetManager('recipe_steps')
 </script>
 {% endblock scripts %}
