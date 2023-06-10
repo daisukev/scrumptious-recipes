@@ -155,19 +155,36 @@ def edit_recipe(request, id):
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
         ingredients_formset = IngredientFormSet(request.POST, prefix="ingredients")
         recipe_steps_formset = RecipeStepFormSet(request.POST, prefix="recipe_steps")
+        print('ingredient formset is bound: ', ingredients_formset.is_bound)
+        print('recipe formset is bound: ', recipe_steps_formset.is_bound)
 
         if form.is_valid() and ingredients_formset.is_valid() and recipe_steps_formset.is_valid():
+
+            # This should not be necessary as the author is already set in creation.
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
 
+            # FIX: This has issues where if it receives less items in the form than it had Initially
+            # it will delete the entire thing and not save the rest of the items.
             # Update ingredients
+
             recipe.ingredients.all().delete()
-            for ingredient_form in ingredients_formset:
-                ingredient = ingredient_form.save(commit=False)
+            print('ingredients deleted!')
+            for i_form in ingredients_formset:
+                ingredient = i_form.save(commit=False)
+                if i_form.is_valid():
+                    print("Validated! here ist he form: ",i_form)
+
+                # FIX: form validates, does not populate the cleaned_data fields. 
+                print(i_form.cleaned_data)
+
                 if ingredient.amount and ingredient.food_item:
                     ingredient.recipe = recipe
                     ingredient.save()
+                    print("This is supposed to have saved!")
+                else:
+                    print("something ain't right this ain't saving")
 
             # Update recipe steps
             recipe.steps.all().delete()
@@ -196,50 +213,3 @@ def edit_recipe(request, id):
     }
     return render(request, "recipes/create.html", context)
 
-# ## TODO: Views like this should be gated by the user. Only the user who is 
-# @login_required
-# def edit_recipe(request, id):
-#     IngredientFormSet = formset_factory(IngredientForm, extra=1)
-#     RecipeStepFormSet = formset_factory(RecipeStepForm, extra=1)
-#     recipe = get_object_or_404(Recipe, id=id)
-#     if request.method == "POST":
-#         form = RecipeForm(request.POST,request.FILES, instance=recipe)
-        
-#         if form.is_valid():
-#             ingredients_formset = IngredientFormSet(request.POST, prefix="ingredients")
-#             recipe_steps_formset = RecipeStepFormSet(request.POST, prefix="recipe_steps")
-        
-#             # don't save immediately
-#             recipe = form.save(commit=False)
-#             # edit field 
-#             recipe.author = request.user
-#             print(recipe)
-#             # save entry
-#             recipe.save()
-#             if ingredients_formset.is_valid():
-#                 for form in ingredients_formset:
-#                     print(form)
-#                     ingredient_form = form.save(commit=False)
-#                     print('cleaned data: ',form.cleaned_data)
-#                     ingredient_form.recipe = recipe
-#                     ingredient_form.save()
-#             if recipe_steps_formset.is_valid():
-#                 for form in recipe_steps_formset:
-#                     recipe_steps_form = form.save(commit=False)
-#                     print('cleaned data: ',form.cleaned_data)
-#                     recipe_steps_form.recipe = recipe
-#                     recipe_steps_form.save()
-#         return redirect("show_recipe", id=id)
-#     else:
-#         form = RecipeForm(instance=recipe)
-#         ingredients_data = [{"amount": i.amount, "food_item": i.food_item} for i in recipe.ingredients.all()]
-#         ingredients = IngredientFormSet(prefix="ingredients", initial=ingredients_data)
-#         print(recipe.steps.all())
-#         recipe_steps = RecipeStepFormSet(prefix="recipe-steps", initial=recipe)
-#         context ={
-#                 "recipe_object": recipe,
-#                 "form": form,
-#                 "ingredients": ingredients,
-#                 "recipe_steps": recipe_steps,
-#                 }
-#         return render(request, "recipes/create.html", context)

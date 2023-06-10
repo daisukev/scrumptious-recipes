@@ -512,7 +512,8 @@ button:focus{
 .ingredients-form{
   display: grid;
   grid-template-columns: auto auto auto;
-  grid-template-columns: auto auto;
+  /* grid-template-columns: auto auto; */
+  grid-template-columns: autofill;
 }
 .ingredients-form label{
   grid-row: 1;
@@ -531,4 +532,10 @@ button:focus{
   margin-left: 1rem;
   width: 100px;
   height: 2.5rem;
+}
+.remove-button {
+  background: var(--red-color);
+}
+.errorlist {
+  grid-row: 3;
 }

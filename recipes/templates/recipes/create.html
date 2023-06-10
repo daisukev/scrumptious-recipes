@@ -11,13 +11,11 @@
     <label for="{{form.description.id_for_label}}">Description</label>
     {{form.description}}
     <h3>Add Ingredients</h3>
-    {{ ingredients.management_form }} 
+    {{ ingredients.management_form }}
     <div class="ingredients-formset">
-    {% for form in ingredients %}
-        <div class="ingredients-form">
-          {{ form}}
-        </div>
-    {% endfor %}
+      {% for form in ingredients %}
+      <div class="ingredients-form">{{ form}}</div>
+      {% endfor %}
     </div>
     <!-- Hidden Block to Store Empty Form HTML -->
     <div id="ingredients-empty-form" style="display: none">
@@ -28,11 +26,9 @@
     <h3>Add Instructions</h3>
     {{ recipe_steps.management_form}}
     <div class="recipe_steps-formset">
-    {% for form in recipe_steps %}
-      <div class="recipe_steps-form">
-      {{ form }}
-      </div>
-    {% endfor %}
+      {% for form in recipe_steps %}
+      <div class="recipe_steps-form">{{ form }}</div>
+      {% endfor %}
     </div>
     <div id="recipe_steps-empty-form" style="display: none">
       {{ recipe_steps.empty_form }}
@@ -54,13 +50,18 @@
       "display: block; width: min(400px, 100%);";
   };
 
-  function formsetManager(prefix){
+
+  function formsetManager(prefix) {
     const addButton = document.getElementById(`add-${prefix}`);
-    const formsetCountInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    const formsetCountInput = document.getElementById(
+      `id_${prefix}-TOTAL_FORMS`
+    );
     let formsetCount = parseInt(formsetCountInput.value);
+    const initialForms = document.getElementById(`id_${prefix}-INITIAL_FORMS`)
+    initialForms.value = '0'
 
-    function addFormset(){
 
+    function addFormset() {
       const formsetForms = document.querySelectorAll(`.${prefix}-formset`);
       const lastFormsetForm = formsetForms[formsetForms.length - 1];
 
@@ -79,77 +80,91 @@
       const formSet = document.getElementsByClassName(`${prefix}-form`);
       const lastForm = formSet[formSet.length - 1];
       addRemoveButton(lastForm, prefix);
+
+      // focuses the newly created item for better UX for keyboard users
+      let focus = lastForm.querySelectorAll('input, textarea')
+      focus[0].focus()
+
     }
 
-    function addRemoveButton(formsetForm){
+    function addRemoveButton(formsetForm) {
       const removeButton = document.createElement("button");
       removeButton.type = "button";
+      removeButton.classList.add("remove-button");
       removeButton.textContent = "Remove";
       formsetForm.appendChild(removeButton);
     }
-    
+
     function handleFormsetClick(event) {
       const target = event.target;
-      if (target.tagName === 'BUTTON' && target.textContent === 'Remove') {
+      if (target.tagName === "BUTTON" && target.textContent === "Remove") {
         const formsetForm = target.closest(`.${prefix}-form`);
-        if(formsetForm){
-
+        if (formsetForm) {
           formsetForm.remove();
           formsetCount--;
 
-
           resetNumbers();
-
         }
       }
     }
-    function resetNumbers(){
+    function resetNumbers() {
       const formset = document.getElementsByClassName(`${prefix}-form`);
 
-      // store the values 
-      let formValues =[] 
-      for(let i = 0; i < formset.length; i++){
-        inputs = formset[i].querySelectorAll('input, textarea')
-        formValues.push(inputs)
+      // store the values
+      let formValues = [];
+      for (let i = 0; i < formset.length; i++) {
+        inputs = formset[i].querySelectorAll("input, textarea");
+        formValues.push(inputs);
       }
-      console.log(formValues)
+      console.log(formValues);
 
-
-      for(let i= 0; i < formset.length; i++){
-        modifiedHTML = formset[i].innerHTML
-        const pattern = new RegExp(`${prefix}-(\\d+)`, 'g');
-        modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}-` )
-        formset[i].innerHTML = modifiedHTML
+      for (let i = 0; i < formset.length; i++) {
+        modifiedHTML = formset[i].innerHTML;
+        const pattern = new RegExp(`${prefix}-(\\d+)`, "g");
+        modifiedHTML = modifiedHTML.replace(pattern, `${prefix}-${i}`);
+        formset[i].innerHTML = modifiedHTML;
       }
 
       // put the values back.
-      for(let i = 0; i < formset.length; i++){
-        inputs = formset[i].querySelectorAll('input, textarea')
-        for(let j= 0; j < formValues[i].length; j++){
-          inputs[j].value = formValues[i][j].value
+      for (let i = 0; i < formset.length; i++) {
+        inputs = formset[i].querySelectorAll("input, textarea");
+        for (let j = 0; j < formValues[i].length; j++) {
+          inputs[j].value = formValues[i][j].value;
         }
-
-
       }
 
-
-
+      // set the values correctly
       totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
       totalForms.value = formset.length;
-
     }
-    
+
     addButton.addEventListener("click", addFormset);
+
+    // adds remove button to all the elements
+    const removeButtonsInit = document.getElementsByClassName(`${prefix}-form`);
+    for (let i = 0; i < removeButtonsInit.length; i++) {
+      // if there is already a button, don't add one.
+      children = removeButtonsInit[i].children
+      console.log('children: ',children)
+      let hasButton = false
+      for(let j = 0; j < children.length; j++){
+        if(children[j].tagName === 'BUTTON')
+          hasButton = true
+      }
+      if(!hasButton){
+        addRemoveButton(removeButtonsInit[i])
+      }
+    }
+
     document.addEventListener("click", handleFormsetClick);
 
-    // TODO: add remove buttons to existing items. 
 
-    return{
+    return {
       addRemoveButton,
-      resetNumbers
-    }
+      resetNumbers,
+    };
   }
-  ingredientsFormManager = formsetManager('ingredients')
-  recipeStepsManager = formsetManager('recipe_steps')
+  ingredientsFormManager = formsetManager("ingredients");
+  recipeStepsManager = formsetManager("recipe_steps");
 </script>
 {% endblock scripts %}

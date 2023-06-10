@@ -27,9 +27,18 @@ class IngredientForm(ModelForm):
         model = Ingredient
         fields = "__all__"
         exclude = ['recipe']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['amount'].required = False
+        self.fields['food_item'].required = False
+
 
 class RecipeStepForm(ModelForm):
     class Meta:
         model = RecipeStep
         fields = "__all__"
         exclude = ['recipe']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['step_number'].required = False
+        self.fields['instruction'].required = False
