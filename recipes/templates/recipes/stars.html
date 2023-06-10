@@ -50,6 +50,25 @@
       })
           const jsonData = await res.json()
         console.log(jsonData)
+    messageDiv = document.getElementById('message-div')
+        if(jsonData.success)
+  {
+      messageDiv.style.setProperty('--message-color', 'var(--green-color)')
+    }
+    else{
+      messageDiv.style.setProperty('--message-color', 'var(--red-color)')
+    }
+        messageDiv.innerHTML = jsonData.message
+        messageDiv.style.opacity= 1
+        messageDiv.classList.remove('slide-out')
+        messageDiv.classList.add('slide-in')
+      setTimeout(()=>{
+        messageDiv.classList.remove('slide-in')
+        messageDiv.classList.add('slide-out')
+        messageDiv.style.opacity = 0
+      }, 3000)
+      
+    
     return jsonData[0]
     }
   if (userIsLoggedIn) {
