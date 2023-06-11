@@ -11,6 +11,7 @@ html,body {
   --red-color: #C93C42;
   --pink-color: #C7767A;
   --green-color: #44803F;
+  --dark-green-color:#27411D;
   --grey-color: #625F54;
   --light-grey-color: #EAE8E7;
   --ultra-light-grey-color: #F7F7F7;
@@ -74,7 +75,7 @@ nav a {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  color: #27411D;
+  color: var(--dark-green-color)
 }
 h2{
   /* border-bottom: 4px solid var(--red-color); */
@@ -126,6 +127,10 @@ h2{
   font-weight: 900;
   font-size: 2rem;
   margin-bottom: 1rem;
+    color: var(--dark-green-color);
+}
+#table-caption{
+    color: var(--dark-green-color);
 }
 
 /* .ingredients-table tr:nth-child(even) { */

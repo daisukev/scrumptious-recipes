@@ -27,7 +27,7 @@ Scrumptious Recipes - {{ recipe.title }}
     {% include 'recipes/rating.html' %}
     <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
     <table class="ingredients-table">
-      <caption>Ingredients List</caption>
+      <caption id="table-caption">Ingredients List</caption>
       <thead>
         <tr>
           <th class ="header-amount">Amount</th>
