@@ -5,7 +5,7 @@
     <span class="star" data-value=2>★</span>
     <span class="star" data-value=1>★</span>
   </div>
-<div class="rating">
+<div id="id-recipe-{{ recipe.id }}" class="rating">
 {% if recipe.average_rating is None %}
   Not Rated Yet! 
 {% else %}

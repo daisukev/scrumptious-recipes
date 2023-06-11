@@ -88,10 +88,11 @@
     starRatingJson = await getRating('{% url 'get_rating' recipe.id %}')
     starRating = starRatingJson.average_rating
     setStars(starRating)
-    ratingDiv = document.getElementsByClassName('rating')
+    <!-- ratingDiv = document.getElementsByClassName('rating') -->
+    ratingDiv = document.getElementById(`id-recipe-{{recipe.id}}`)
     console.log(ratingDiv)
 
-    ratingDiv[0].innerHTML= `${starRatingJson.average_rating.toFixed(1)} stars (${starRatingJson.num_ratings} rating${starRatingJson.num_ratings>1?'s':''})`
+    ratingDiv.innerHTML= `${starRatingJson.average_rating.toFixed(1)} stars (${starRatingJson.num_ratings} rating${starRatingJson.num_ratings>1?'s':''})`
 
     
     
