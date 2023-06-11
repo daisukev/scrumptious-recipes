@@ -1,3 +1,4 @@
+/* TODO: Break these out into separate css files */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;400;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,800&display=swap');
 html,body {
@@ -73,10 +74,18 @@ nav a {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  color: var(--text-color);
+  color: #27411D;
 }
 h2{
   /* border-bottom: 4px solid var(--red-color); */
+  font-size: 2rem;
+  font-weight: 900;
+}
+.banner-text{
+  font-family: "Noto Sans";
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--red-color);
 }
 
 
@@ -90,8 +99,9 @@ h2{
   border-collapse: collapse;
   grid-template-columns: subgrid;
   grid-column: 1/ span 3;
-  width: min(400px, 100%);
+  width: min(500px, 100%);
   padding: 1rem;
+  margin-top: 3rem;
 }
 .ingredient-amount{
   text-align: right;
@@ -104,7 +114,6 @@ h2{
 
 
 .ingredients-table > td, th, tr{
-  border-radius: 20px;
   padding-inline: 0.5rem;
 }
 .ingredients-table > caption, th{
@@ -114,12 +123,30 @@ h2{
   text-align: right;
 }
 .ingredients-table > caption{
-  font-weight: 700;
-  font-size: 1.5rem;
+  font-weight: 900;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
-.ingredients-table tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
+/* .ingredients-table tr:nth-child(even) { */
+/*   background-color: rgba(0, 0, 0, 0.1); */
+/* } */
+table:has(tbody tr:nth-of-type(4)) tbody tr:nth-of-type(even){
+  --dark-row: rgb(0 0 0 / 0.05);
+  background: var(--dark-row);
+}
+table:has(tbody tr:nth-of-type(4)) thead tr, th{
+  height: 2rem;
+  color: var(--ultra-light-grey-color);
+  --thead-color: #28411E;
+  background: var(--thead-color);
+}
+
+table:not(:has(tbody tr:nth-of-type(4))) *{
+  background: initial;
+  color: initial;
+  padding-inline: 0;
+  text-align:left;
 }
 
 /* .nav-list{ */
@@ -434,19 +461,16 @@ textarea,
 select,
 button {
   width: min(400px, 100%);
-  padding: 0;
   margin: 0;
   box-sizing: border-box;
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
   box-shadow: 2px 2px 5px rgb(0 0 0 / 0.3);
   line-height: 1.5rem;
+  padding: 0.5rem;
 }
 input, textarea, select{
   outline: none;
   border: 2px solid var(--ultra-light-grey-color);
-}
-button{
-  border: 0px;
 }
 input[type="file"] {
   display:none;
@@ -474,10 +498,11 @@ textarea{
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 button {
-  height: 2rem;
-  width: min(180px, 100%);
+  border: 0px;
+  height: 2.8rem;
+  width: min(10rem, 100%);
   font-size: 1.1rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
   margin-block: 1rem;
   /* background:var(--red-color); */
   background:var(--green-color);
@@ -518,9 +543,15 @@ button:focus{
 }
 .ingredients-form{
   display: grid;
-  grid-template-columns: auto auto auto;
+  align-items: start;
+  grid-template-columns: 12ch auto auto;
+  gap: 0.5rem;
   /* grid-template-columns: auto auto; */
   grid-template-columns: autofill;
+}
+
+.ingredients-form > * {
+  /* outline: 2px dotted blue; */
 }
 .ingredients-form label{
   grid-row: 1;
@@ -530,7 +561,6 @@ button:focus{
 }
 .ingredients-form input{
   grid-row: 2;
-  width: 200px;
 }
 .ingredients-form button{
   grid-row: 2;
@@ -597,3 +627,36 @@ button:focus{
   }
 }
 
+.read-more{
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.8rem;
+  letter-spacing: .07em;
+}
+
+/* .recipe_steps-form{ */
+/*   display: grid; */
+/*   align-items: start; */
+/*   grid-template-columns: 12ch auto auto; */
+/*   gap: 1rem; */
+/*   /1* grid-template-columns: auto auto; *1/ */
+/*   grid-template-columns: autofill; */
+/* } */
+/* .recipe_steps-form > * { */
+/*   /1* outline: 2px dotted blue; *1/ */
+/* } */
+
+/* .recipe_steps-form textarea{ */
+/*   grid-row: 2; */
+/*   grid-column: 2; */
+/*   height: 8dvh; */
+
+/* } */
+/* .recipe_steps-form input{ */
+/*   grid-row: 2; */
+/*   grid-column: 1; */
+/* } */
+/* .recipe_steps-form button { */
+/*   grid-row: 2; */
+/*   grid-column: 3; */
+/* } */

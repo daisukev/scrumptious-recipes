@@ -5,6 +5,8 @@
       initialRating =0
     else
       initialRating = '{{recipe.average_rating}}'
+
+  var starRating = initialRating
   recipeId = {{ recipe.id}}
   const stars = document.querySelectorAll('#recipe-' + recipeId + ' .star');
   {% if user.is_authenticated %}
@@ -35,6 +37,17 @@
   setStars(initialRating)
   document.addEventListener("DOMContentLoaded", (event) => {
 
+  async function updateStarRating(){
+    starRating = await getRating('{% url 'get_rating' recipe.id %}')
+    setStars(starRating.average_rating)
+  }
+
+  async function getRating(url = ""){
+    const res = await fetch(url)
+    const json = await res.json()
+    console.log(json)
+    return json
+  }
   // initialize the star rating
   async function addRating(url = "", value)
     {
@@ -70,6 +83,19 @@
       
     // TODO: message handler should probably not be handled by the stars.
     // TODO: maybe keep track of message stack and offset each message on the Y axis.
+
+    // set the star rating and 
+    starRatingJson = await getRating('{% url 'get_rating' recipe.id %}')
+    starRating = starRatingJson.average_rating
+    setStars(starRating)
+    ratingDiv = document.getElementsByClassName('rating')
+    console.log(ratingDiv)
+
+    ratingDiv[0].innerHTML= `${starRatingJson.average_rating.toFixed(1)} stars (${starRatingJson.num_ratings} rating${starRatingJson.num_ratings>1?'s':''})`
+
+    
+    
+
     
     return jsonData[0]
     }
@@ -82,7 +108,7 @@
           resetStars()
       }
       const mouseoutListener = (event) =>{
-        setStars(initialRating)
+        setStars(starRating)
       }
       {% if user.is_authenticated %}  
       const clickListener = (event)=>{

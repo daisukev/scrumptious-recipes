@@ -53,6 +53,14 @@ def my_recipe_list(request):
     return render(request, "recipes/list.html", context)
 
 
+def get_rating(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    return JsonResponse({
+        "recipe": recipe.title,
+        "average_rating": recipe.average_rating,
+        "num_ratings": recipe.num_ratings,
+        })
+    
 
 # This handles creation and editing of ratings.
 @login_required

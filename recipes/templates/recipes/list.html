@@ -38,7 +38,7 @@ Scrumptious Recipes
           {{recipe.description}}
         {%else%}
         {{recipe.description|truncatechars:150}}         {%endif%}
-      <a href="{% url 'show_recipe' recipe.id %}">Read more.</a>
+      <a href="{% url 'show_recipe' recipe.id %}"class ="read-more">Read more.</a>
 
         </p>
         <div class ="author">
