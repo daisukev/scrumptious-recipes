@@ -336,18 +336,24 @@ nav ul li{
   -webkit-background-clip: text;
   background-clip: text;
 }
+.partial-star{
+  /* --star-percentage: ; */
+  /* background: linear-gradient(to right, gold var(--star-percentage), black calc(100% - var(--star-percentage))); */
+  background: linear-gradient(to right, gold var(--star-percentage), gold var(--star-percentage), black var(--star-percentage), black calc(100% - var(--star-percentage)));
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+}
 
 .star:hover,
 .star:hover ~ .star,
 .star:hover ~ .star:not(:hover) {
 
   cursor: pointer;
-  /* color: gold; */
   background:gold;
-  /* background: -webkit-linear-gradient(0deg, gold 100%, #000 0%); */
   -webkit-background-clip: text;
   background-clip: text;
-  /* -webkit-text-fill-color: transparent; */
 }
 
 
