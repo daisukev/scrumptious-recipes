@@ -120,6 +120,23 @@ def create_rating(request,recipe_id, user_id):
                 "message": "Could not add rating."})
 
 @login_required
+def delete_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id) 
+
+    # TODO: Things like this should probably show an error to the user trying to perform the operation rather than silently failing.
+    if request.user != recipe.author:
+        return redirect('show_recipe', recipe_id)
+    else:
+        if request.method=="POST":
+            recipe.delete()
+            return redirect('recipe_list')
+    context = {
+            "recipe": recipe
+            }
+    return render(request, "recipes/delete.html", context)
+
+
+@login_required
 def create_recipe(request):
     IngredientFormSet = formset_factory(IngredientForm, extra=1)
     RecipeStepFormSet = formset_factory(RecipeStepForm, extra=1)
@@ -187,9 +204,6 @@ def edit_recipe(request, id):
             recipe.author = request.user
             recipe.save()
 
-            # FIX: This has issues where if it receives less items in the form than it had Initially
-            # it will delete the entire thing and not save the rest of the items.
-            # Update ingredients
 
             recipe.ingredients.all().delete()
             print('ingredients deleted!')
@@ -198,7 +212,6 @@ def edit_recipe(request, id):
                 if i_form.is_valid():
                     print("Validated! here ist he form: ",i_form)
 
-                # FIX: form validates, does not populate the cleaned_data fields. 
                 print(i_form.cleaned_data)
 
                 if ingredient.amount and ingredient.food_item:

@@ -32,6 +32,7 @@ Scrumptious Recipes - {{ recipe.title }}
     TODO: Delete link would also go in here.
     {% endcomment %}
     <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
+    <a href="{% url 'delete_recipe' recipe.id %}">Delete Recipe</a>
     {% endif %}
     <table class="ingredients-table">
       <caption id="table-caption">Ingredients List</caption>

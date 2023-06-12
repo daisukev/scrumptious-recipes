@@ -676,3 +676,8 @@ button:focus{
 .content {
   padding-top: 3rem;
 }
+
+.cancel-button{
+  width: min(400px, 100%);
+  margin-right: 2rem;
+}
