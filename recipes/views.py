@@ -52,6 +52,18 @@ def my_recipe_list(request):
             }
     return render(request, "recipes/list.html", context)
 
+def recipes_by_author(request, author_id):
+    recipes = Recipe.objects.filter(author=author_id)
+    paginator = Paginator(recipes, 9)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {
+            "recipe_list": page_obj,
+            "view": "author_recipe_list",
+            "author": f"{recipes[0].author.first_name} {recipes[0].author.last_name}"
+            }
+    return render(request, "recipes/list.html", context)
+
 
 def get_rating(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
@@ -158,6 +170,8 @@ def edit_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     IngredientFormSet = formset_factory(IngredientForm, extra=0)
     RecipeStepFormSet = formset_factory(RecipeStepForm, extra=0)
+    if recipe.author != request.user:
+        return redirect("show_recipe", id=id)
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES, instance=recipe)

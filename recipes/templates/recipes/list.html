@@ -12,6 +12,9 @@ Scrumptious Recipes
   {% if view == "my_recipe_list"%}
   <h2>{{user.first_name}}'s Recipes</h2>
   {%endif%}
+  {% if view == "author_recipe_list"%}
+    <h2>{{author}}'s recipes</h2>
+  {% endif %}
   {% if not recipe_list and view == "my_recipe_list" %}
   <p>
   You have no recipes. Why not <a href="{% url 'create_recipe' %}">create one?</a>
@@ -44,7 +47,9 @@ Scrumptious Recipes
         <div class ="author">
           By
           {% if recipe.author %}
+          <a href="{% url 'recipes_by_author' recipe.author.id %}">
           {{recipe.author.first_name}} {{recipe.author.last_name}}
+          </a>
           {% else %}
           Anonymous
           {%endif%}

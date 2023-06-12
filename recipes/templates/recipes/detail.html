@@ -11,7 +11,9 @@ Scrumptious Recipes - {{ recipe.title }}
     <p class="description">{{recipe.description}}</p>
     <p>by
       {% if recipe.author%}
-      {{recipe.author.first_name}} {{recipe.author.last_name}}
+          <a href="{% url 'recipes_by_author' recipe.author.id %}">
+          {{recipe.author.first_name}} {{recipe.author.last_name}}
+          </a>
       {%else%}
       Anyonymous
       {%endif%}
@@ -25,7 +27,12 @@ Scrumptious Recipes - {{ recipe.title }}
   <div class="recipe-content">
 
     {% include 'recipes/rating.html' %}
+    {% if user == recipe.author %}
+    {% comment %} 
+    TODO: Delete link would also go in here.
+    {% endcomment %}
     <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
+    {% endif %}
     <table class="ingredients-table">
       <caption id="table-caption">Ingredients List</caption>
       <thead>
