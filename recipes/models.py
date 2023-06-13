@@ -73,7 +73,14 @@ class Recipe(models.Model):
     @property
     def num_ratings(self):
         return len(self.ratings.all())
-
+    @property
+    def ratings_breakdown(self):
+        ratings = self.ratings.all()
+        ratings_list = [0,0,0,0,0]
+        if ratings:
+            for rating in ratings:
+                ratings_list[rating.value-1] += 1
+        return ratings_list
 
     def save(self, *args, **kwargs):
 

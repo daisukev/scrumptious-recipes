@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_filters %}
 {% block title %}
     Scrumptious Recipes - {{ recipe.title }}
 {% endblock title %}
@@ -24,7 +25,29 @@
                  alt="A picture of {{ recipe.title }}">
         </div>
         <div class="recipe-content">
-            {% include 'recipes/rating.html' %}
+            <div>
+              <div class="rating-container">
+                <h3> Rating</h3>
+                {% include 'recipes/rating.html' %}
+                <span>
+              Breakdown <button onclick=toggleHistogram() class="toggle-button" aria-expanded="false" >▶</button>
+                </span>
+              <div class="rating-histogram hidden">
+                {% for item in recipe.ratings_breakdown %}
+                <div class="rating-histogram-row">
+                  <span class="rating-histogram-rating">{{forloop.counter}}</span>
+                    <span class="rating-histogram-star"> ★ </span>
+                    <div class="rating-histogram-progress">
+                      <div class="rating-histogram-progress-bar" style="width: {{item|divide:recipe.num_ratings|multiply:100|floatformat:"2"}}%;"></div>
+                    </div>
+                    <span class="rating-histogram-count">{{item}}
+                 </span>
+                 </div>
+                  
+                {% endfor %}
+              </div>
+              </div>
+            </div>
             {% if user == recipe.author %}
                 {% comment %}
     TODO: maybe style these?
@@ -58,4 +81,19 @@
 {% endblock content %}
 {% block scripts %}
     {% include 'recipes/stars.html' %}
+    <script>
+      function toggleHistogram(){
+        const ratingHistogram = document.querySelector('.rating-histogram')
+        const toggleButton = document.querySelector('.toggle-button')
+        const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+        if(isExpanded){
+          ratingHistogram.classList.add('hidden')
+          toggleButton.setAttribute("aria-expanded", "false")
+        }
+        else{
+          ratingHistogram.classList.remove('hidden')
+          toggleButton.setAttribute("aria-expanded", "true")
+        }
+      }
+    </script>
 {% endblock scripts %}

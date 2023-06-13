@@ -661,3 +661,90 @@ button:focus{
   background: var(--green-color);
   color: var(--background-color);
 }
+
+.rating-container{
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--dark-green-color);
+  width: min(400px, 100%);
+  display:grid;
+  grid-template-columns: 15rem auto;
+  background: rgb(0 0 0 / 0.035)
+}
+.rating-container > h3{
+  grid-column: 1/-1
+}
+.rating-container > span{
+  grid-row: 3;
+}
+.rating-histogram{
+  display: flex;
+  flex-direction: column-reverse;
+  /* align-self: start; */
+  grid-row: 4;
+}
+
+.rating-histogram-row{
+  display: flex;
+  align-items: center;
+}
+.rating-histogram-row > * {
+  font-size: 0.9rem;
+  padding-inline: 0.5rem;
+}
+.rating-histogram-star{
+  color: gold;
+}
+.rating-histogram-progress{
+  width: 7rem;
+  height: 0.675rem;
+  background: rgb(0 0 0 / 0.2);
+  padding: 0;
+  margin:0;
+}
+.rating-histogram-progress-bar{
+  display: block;
+  height: 100%;
+  background: var(--red-color);
+}
+
+.hidden{
+  display:none;
+}
+.toggle-button{
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.8rem;
+  border: 0;
+  background: transparent;
+  box-shadow: initial;
+  color: var(--text-color);
+  text-align: center;
+  justify-content: center;
+  padding: 0; 
+  margin:0;
+}
+.toggle-button:hover{
+  filter: initial;
+  transform:scale(1.15)
+}
+.toggle-button:active, .toggle-button:focus{
+  border: 0;
+  outline: none;
+  box-shadow: initial;
+  filter: initial;
+}
+
+/* button[aria-expanded="true"] */
+button.toggle-button[aria-expanded="true"]{
+  transform: rotate(90deg);
+}
+
+.rating-histogram-count{
+  font-size: 0.7rem;
+  color: var(--grey-color);
+}
+.rating-histogram-rating{
+  font-size:0.9rem;
+}

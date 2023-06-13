@@ -1,174 +1,150 @@
 <script>
-    (function() {
-        let initialRating
-        if ("{{recipe.average_rating}}" === "None") // If there is 0 ratings, this returns "None" so have to initialize it with a 0
-            initialRating = 0
-        else
-            initialRating = '{{recipe.average_rating}}'
+(function(){
+    let initialRating
+    if("{{recipe.average_rating}}"=== "None") // If there is 0 ratings, this returns "None" so have to initialize it with a 0
+      initialRating =0
+    else
+      initialRating = '{{recipe.average_rating}}'
 
-        var starRating = initialRating
-        recipeId = '{{ recipe.id}}'
-        const stars = document.querySelectorAll('#recipe-' + recipeId + ' .star');
-        {
-            %
-            if user.is_authenticated %
+  var starRating = initialRating
+  recipeId = '{{ recipe.id}}'
+  const stars = document.querySelectorAll('#recipe-' + recipeId + ' .star');
+  {% if user.is_authenticated %}
+    const userIsLoggedIn = true 
+  {% else %}
+    const userIsLoggedIn= false
+  {% endif %}
+
+  function setStars(rating) {
+    <!-- console.log("setStars: ", rating) -->
+    let localRating = rating
+    for (let i = stars.length - 1; i >= 0; i--) {
+      if (localRating >= 1) {
+        stars[i].classList.add('gold')
+      }
+      else{
+
+        if(localRating > 0)
+      {
+          convertedRating = localRating * 100 + "%"
+          console.log(convertedRating)
+          stars[i].setAttribute('data-percent', convertedRating)
+          stars[i].classList.add('partial-star')
+          stars[i].style.setProperty('--star-percentage', convertedRating)
+          const starPercentage = getComputedStyle(stars[i]).getPropertyValue('--star-percentage');
+          console.log('star percentage: ', starPercentage)
+
         }
-        const userIsLoggedIn = true {
-            %
-            else %
-        }
-        const userIsLoggedIn = false {
-            % endif %
-        }
+        <!-- console.log(stars) -->
+        <!-- console.log('localRating: ',localRating * 100) -->
+        // FIX: There is an issue where when you click, and then mouseout of the stars, it will not reset it to the correct stars until you hover over it again.
 
-        function setStars(rating) {
-            <
-            !--console.log("setStars: ", rating) -- >
-                let localRating = rating
-            for (let i = stars.length - 1; i >= 0; i--) {
-                if (localRating >= 1) {
-                    stars[i].classList.add('gold')
-                } else {
+      }
+      localRating--
+    }
+  }
+  function resetStars() {
+    for (let i = 0; i < stars.length; i++){
+      stars[i].classList.remove('gold')
+      stars[i].classList.remove('partial-star')
+    }
+      // will need to update with partial stars support
+  }
 
-                    if (localRating > 0) {
-                        convertedRating = localRating * 100 + "%"
-                        console.log(convertedRating)
-                        stars[i].setAttribute('data-percent', convertedRating)
-                        stars[i].classList.add('partial-star')
-                        stars[i].style.setProperty('--star-percentage', convertedRating)
-                        const starPercentage = getComputedStyle(stars[i]).getPropertyValue('--star-percentage');
-                        console.log('star percentage: ', starPercentage)
+  setStars(initialRating)
+  document.addEventListener("DOMContentLoaded", (event) => {
 
-                    } <
-                    !--console.log(stars) -- >
-                        <
-                        !--console.log('localRating: ', localRating * 100) -- >
-                        // FIX: There is an issue where when you click, and then mouseout of the stars, it will not reset it to the correct stars until you hover over it again.
+  <!-- async function updateStarRating(){ -->
+  <!--   starRating = await getRating('{% url 'get_rating' recipe.id %}') -->
+  <!--   setStars(starRating.average_rating) -->
+  <!-- } -->
 
-                }
-                localRating--
-            }
-        }
+  async function getRating(url = ""){
+    const res = await fetch(url)
+    const json = await res.json()
+    console.log(json)
+    return json
+  }
+  // initialize the star rating
+  async function addRating(url = "", value)
+    {
+      headers = new Headers()
+      headers.append('X-CSRFToken', '{{csrf_token}}')
+      formData = new FormData()
+      formData.append('value', value)
+      const res = await fetch(url,{
+        method: "POST",
+        body: formData,
+        credentials: 'same-origin',
+        headers: headers,
+      })
+          const jsonData = await res.json()
+        console.log(jsonData)
+    messageDiv = document.getElementById('message-div')
+        if(jsonData.success)
+  {
+      messageDiv.style.setProperty('--message-color', 'var(--green-color)')
+    }
+    else{
+      messageDiv.style.setProperty('--message-color', 'var(--red-color)')
+    }
+        messageDiv.innerHTML = jsonData.message
+        messageDiv.style.opacity= 1
+        messageDiv.classList.remove('slide-out')
+        messageDiv.classList.add('slide-in')
+      setTimeout(()=>{
+        messageDiv.classList.remove('slide-in')
+        messageDiv.classList.add('slide-out')
+        messageDiv.style.opacity = 0
+      }, 3000)
+      
+    // TODO: message handler should probably not be handled by the stars.
+    // TODO: maybe keep track of message stack and offset each message on the Y axis.
 
-        function resetStars() {
-            for (let i = 0; i < stars.length; i++) {
-                stars[i].classList.remove('gold')
-                stars[i].classList.remove('partial-star')
-            }
-            // will need to update with partial stars support
-        }
-
-        setStars(initialRating)
-        document.addEventListener("DOMContentLoaded", (event) => {
-
-            <
-            !--async function updateStarRating() {
-                    -- >
-                    <
-                    !--starRating = await getRating('{% url '
-                            get_rating ' recipe.id %}') -- >
-                        <
-                        !--setStars(starRating.average_rating) -- >
-                        <
-                        !--
-                }-- >
-
-                async function getRating(url = "") {
-                    const res = await fetch(url)
-                    const json = await res.json()
-                    console.log(json)
-                    return json
-                }
-            // initialize the star rating
-            async function addRating(url = "", value) {
-                headers = new Headers()
-                headers.append('X-CSRFToken', '{{csrf_token}}')
-                formData = new FormData()
-                formData.append('value', value)
-                const res = await fetch(url, {
-                    method: "POST",
-                    body: formData,
-                    credentials: 'same-origin',
-                    headers: headers,
-                })
-                const jsonData = await res.json()
-                console.log(jsonData)
-                messageDiv = document.getElementById('message-div')
-                if (jsonData.success) {
-                    messageDiv.style.setProperty('--message-color', 'var(--green-color)')
-                } else {
-                    messageDiv.style.setProperty('--message-color', 'var(--red-color)')
-                }
-                messageDiv.innerHTML = jsonData.message
-                messageDiv.style.opacity = 1
-                messageDiv.classList.remove('slide-out')
-                messageDiv.classList.add('slide-in')
-                setTimeout(() => {
-                    messageDiv.classList.remove('slide-in')
-                    messageDiv.classList.add('slide-out')
-                    messageDiv.style.opacity = 0
-                }, 3000)
-
-                // TODO: message handler should probably not be handled by the stars.
-                // TODO: maybe keep track of message stack and offset each message on the Y axis.
-
-                // set the star rating and 
-                starRatingJson = await getRating('{% url '
-                    get_rating ' recipe.id %}')
-                starRating = starRatingJson.average_rating <
-                    !--ratingDiv = document.getElementsByClassName('rating') -- >
-                    ratingDiv = document.getElementById(`id-recipe-{{recipe.id}}`)
-                ratingDiv.innerHTML = `${starRatingJson.average_rating.toFixed(1)} stars (${starRatingJson.num_ratings} rating${starRatingJson.num_ratings>1?'s':''})`
+    // set the star rating and 
+    starRatingJson = await getRating('{% url 'get_rating' recipe.id %}')
+    starRating = starRatingJson.average_rating
+    <!-- ratingDiv = document.getElementsByClassName('rating') -->
+    ratingDiv = document.getElementById(`id-recipe-{{recipe.id}}`)
+    ratingDiv.innerHTML= `${starRatingJson.average_rating.toFixed(1)} stars (${starRatingJson.num_ratings} rating${starRatingJson.num_ratings>1?'s':''})`
 
 
-                setStars(starRating)
+    setStars(starRating)
 
+    
+    
 
+    
+    return jsonData[0]
+    }
+  if (userIsLoggedIn) {
+        let mouseoverListeners = []
+        let mouseoutListeners = []
+        let clickListeners = []
+    stars.forEach((star, index) => {
+      const mouseoverListener = (event)=>{
+          resetStars()
+      }
+      const mouseoutListener = (event) =>{
+        setStars(starRating)
+      }
+      {% if user.is_authenticated %}  
+      const clickListener = (event)=>{
+          value = star.dataset.value[0]
+          addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value) 
+          setStars(starRating) 
+      }    
+    {% endif %}
+      
+      star.addEventListener("mouseover", mouseoverListener)
+      star.addEventListener("mouseout", mouseoutListener)
+      star.addEventListener("click", clickListener  )
 
-
-
-                return jsonData[0]
-            }
-            if (userIsLoggedIn) {
-                let mouseoverListeners = []
-                let mouseoutListeners = []
-                let clickListeners = []
-                stars.forEach((star, index) => {
-                    const mouseoverListener = (event) => {
-                        resetStars()
-                    }
-                    const mouseoutListener = (event) => {
-                        setStars(starRating)
-                    } {
-                        %
-                        if user.is_authenticated %
-                    }
-                    const clickListener = (event) => {
-                        value = star.dataset.value[0]
-                        addRating("{% url 'create_rating' recipe_id=recipe.id user_id=user.id%}", value)
-                        setStars(starRating)
-                    } {
-                        % endif %
-                    }
-
-                    star.addEventListener("mouseover", mouseoverListener)
-                    star.addEventListener("mouseout", mouseoutListener)
-                    star.addEventListener("click", clickListener)
-
-                    mouseoverListeners.push({
-                        star,
-                        mouseoverListener
-                    })
-                    mouseoutListeners.push({
-                        star,
-                        mouseoutListener
-                    })
-                    clickListeners.push({
-                        star,
-                        clickListener
-                    })
-                })
-            }
-        })
-    })();
+      mouseoverListeners.push({ star, mouseoverListener })
+      mouseoutListeners.push({ star, mouseoutListener })
+      clickListeners.push({ star, clickListener })
+    })
+  }
+  })
+})();
 </script>
