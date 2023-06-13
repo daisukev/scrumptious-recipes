@@ -32,27 +32,28 @@
                             {% if recipe.description|length < 150 %}
                                 {{ recipe.description }}
                             {% else %}
-                                {{ recipe.description|truncatechars:150 }}         {% endif %}
-                                <a href="{% url 'show_recipe' recipe.id %}"class ="read-more">Read more.</a>
-                            </p>
-                            <div class ="author">
-                                By
-                                {% if recipe.author %}
-                                    <a href="{% url 'recipes_by_author' recipe.author.id %}">
-                                        {{ recipe.author.first_name }} {{ recipe.author.last_name }}
-                                    </a>
-                                {% else %}
-                                    Anonymous
-                                {% endif %}
-                            </div>
-                            {% include 'recipes/rating.html' %}
+                                {{ recipe.description|truncatechars:150 }}
+                            {% endif %}
+                            <a href="{% url 'show_recipe' recipe.id %}"class ="read-more">Read more.</a>
+                        </p>
+                        <div class ="author">
+                            By
+                            {% if recipe.author %}
+                                <a href="{% url 'recipes_by_author' recipe.author.id %}">
+                                    {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                                </a>
+                            {% else %}
+                                Anonymous
+                            {% endif %}
                         </div>
+                        {% include 'recipes/rating.html' %}
                     </div>
-                    {% include 'recipes/stars.html' %}
-                {% endfor %}
-            </div>
-            {% include 'pagination.html' %}
-        </main>
-    {% endblock content %}
-    {% block scripts %}
-    {% endblock scripts %}
+                </div>
+                {% include 'recipes/stars.html' %}
+            {% endfor %}
+        </div>
+        {% include 'pagination.html' %}
+    </main>
+{% endblock content %}
+{% block scripts %}
+{% endblock scripts %}
