@@ -32,11 +32,13 @@ def show_recipe(request, id):
 def recipe_list(request):
     recipes = Recipe.objects.all()
     paginator = Paginator(recipes, 9)
-    page_number = request.GET.get("page")
+    page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
+    page_range = paginator.get_elided_page_range(number=page_number)
     context = {
             "recipe_list": page_obj,
-            "view": "all_recipes"
+            "view": "all_recipes",
+            "page_range": page_range,
             }
     return render(request, "recipes/list.html", context)
 
@@ -46,20 +48,24 @@ def my_recipe_list(request):
     paginator = Paginator(recipes, 9)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    page_range = paginator.get_elided_page_range(number=page_number)
     context = {
             "recipe_list": page_obj,
-            "view": "my_recipe_list"
+            "view": "all_recipes",
+            "page_range": page_range,
             }
     return render(request, "recipes/list.html", context)
 
 def recipes_by_author(request, author_id):
     recipes = Recipe.objects.filter(author=author_id)
     paginator = Paginator(recipes, 9)
-    page_number = request.GET.get("page")
+    page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
+    page_range = paginator.get_elided_page_range(number=page_number)
     context = {
             "recipe_list": page_obj,
             "view": "author_recipe_list",
+            "page_range": page_range,
             "author": f"{recipes[0].author.first_name} {recipes[0].author.last_name}"
             }
     return render(request, "recipes/list.html", context)
