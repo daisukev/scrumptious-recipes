@@ -1,66 +1,61 @@
 {% extends 'base.html' %}
 {% block title %}
-Scrumptious Recipes - {{ recipe.title }}
+    Scrumptious Recipes - {{ recipe.title }}
 {% endblock title %}
-
 {% block content %}
-<div class="recipe-detail">
-  <div class="recipe-header">
-
-    <h2>{{ recipe.title }}</h2>
-    <p class="description">{{recipe.description}}</p>
-    <p>by
-      {% if recipe.author%}
-          <a href="{% url 'recipes_by_author' recipe.author.id %}">
-          {{recipe.author.first_name}} {{recipe.author.last_name}}
-          </a>
-      {%else%}
-      Anyonymous
-      {%endif%}
-      on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
-    </p>
-    <div class="main-picture-container">
+    <div class="recipe-detail">
+        <div class="recipe-header">
+            <h2>{{ recipe.title }}</h2>
+            <p class="description">{{ recipe.description }}</p>
+            <p>
+                by
+                {% if recipe.author %}
+                    <a href="{% url 'recipes_by_author' recipe.author.id %}">
+                        {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                    </a>
+                {% else %}
+                    Anyonymous
+                {% endif %}
+                on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
+            </p>
+            <div class="main-picture-container"></div>
+            <img src="{{ recipe.picture.url }}"
+                 class="main-picture"
+                 alt="A picture of {{ recipe.title }}">
+        </div>
+        <div class="recipe-content">
+            {% include 'recipes/rating.html' %}
+            {% if user == recipe.author %}
+                {% comment %}
+    TODO: maybe style these?
+                {% endcomment %}
+                <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
+                <a href="{% url 'delete_recipe' recipe.id %}">Delete Recipe</a>
+            {% endif %}
+            <table class="ingredients-table">
+                <caption id="table-caption">Ingredients List</caption>
+                <thead>
+                    <tr>
+                        <th class ="header-amount">Amount</th>
+                        <th>Food item</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ingredient in recipe.ingredients.all %}
+                        <tr>
+                            <td class="ingredient-amount">{{ ingredient.amount }}</td>
+                            <td class="ingredient-food-item">{{ ingredient.food_item }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h2>Steps</h2>
+            <ol>
+                {% for step in recipe.steps.all %}<li>{{ step.instruction }}</li>{% endfor %}
+            </ol>
+        </div>
     </div>
-    <img src="{{ recipe.picture.url }}" class="main-picture" alt="A picture of {{recipe.title}}">
-  </div>
-
-  <div class="recipe-content">
-
-    {% include 'recipes/rating.html' %}
-    {% if user == recipe.author %}
-    {% comment %} 
-    TODO: Delete link would also go in here.
-    {% endcomment %}
-    <a href="{% url 'edit_recipe' recipe.id %}">Edit Recipe</a>
-    <a href="{% url 'delete_recipe' recipe.id %}">Delete Recipe</a>
-    {% endif %}
-    <table class="ingredients-table">
-      <caption id="table-caption">Ingredients List</caption>
-      <thead>
-        <tr>
-          <th class ="header-amount">Amount</th>
-          <th>Food item</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ingredient in recipe.ingredients.all %}
-        <tr>
-          <td class="ingredient-amount">{{ingredient.amount}}</td>
-          <td class="ingredient-food-item">{{ingredient.food_item}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <h2>Steps</h2>
-    <ol>
-      {% for step in recipe.steps.all %}
-      <li>{{step.instruction}}</li>
-      {% endfor %}
-    </ol>
-  </div>
-</div>
 {% endblock content %}
-
 {% block scripts %}
-{% include 'recipes/stars.html' %}
-{% endblock scripts%}
+    {% include 'recipes/stars.html' %}
+{% endblock scripts %}

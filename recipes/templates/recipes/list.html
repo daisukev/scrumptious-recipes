@@ -1,68 +1,58 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block title %}
-Scrumptious Recipes
+    Scrumptious Recipes
 {% endblock title %}
-
 {% block content %}
-<main class="content-container">
-  {% if view == "all_recipes"%}
-    <h2>Explore Recipes</h2>
-  {%endif%}
-  {% if user.is_authenticated %}
-  {% if view == "my_recipe_list"%}
-  <h2>{{user.first_name}}'s Recipes</h2>
-  {%endif%}
-  {% if view == "author_recipe_list"%}
-    <h2>{{author}}'s recipes</h2>
-  {% endif %}
-  {% if not recipe_list and view == "my_recipe_list" %}
-  <p>
-  You have no recipes. Why not <a href="{% url 'create_recipe' %}">create one?</a>
-  </p>
-  {% endif %}
-
-  {% endif %}
-  <div class="recipe-grid">
-
-    {% for recipe in recipe_list %}
-    <div class="recipe-item" >
-      <div class="img-container">
-        <a href="{% url 'show_recipe' recipe.id %}">
-        <img class="thumbnail" src="{{recipe.thumbnail.url}}" alt="A Picture of {{recipe.title}}"/>
-</a>
-      </div>
-      <div class="recipe-item-lower">
-        
-        <a href="{% url 'show_recipe' recipe.id %}">
-        <h3 class="recipe-item-heading">{{ recipe.title }} </h3>
-        </a>
-        <p>
-        {%if recipe.description|length < 150 %}
-          {{recipe.description}}
-        {%else%}
-        {{recipe.description|truncatechars:150}}         {%endif%}
-      <a href="{% url 'show_recipe' recipe.id %}"class ="read-more">Read more.</a>
-
-        </p>
-        <div class ="author">
-          By
-          {% if recipe.author %}
-          <a href="{% url 'recipes_by_author' recipe.author.id %}">
-          {{recipe.author.first_name}} {{recipe.author.last_name}}
-          </a>
-          {% else %}
-          Anonymous
-          {%endif%}
-        </div>
-        {% include 'recipes/rating.html' %}
-      </div>
-    </div>
-  {% include 'recipes/stars.html'%}
-    {% endfor %}
-  </div>
-  {% include 'pagination.html' %}
-</main>
-{% endblock content %}
-
-{% block scripts %}
-{% endblock scripts %}
+    <main class="content-container">
+        {% if view == "all_recipes" %}<h2>Explore Recipes</h2>{% endif %}
+        {% if user.is_authenticated %}
+            {% if view == "my_recipe_list" %}<h2>{{ user.first_name }}'s Recipes</h2>{% endif %}
+            {% if view == "author_recipe_list" %}<h2>{{ author }}'s recipes</h2>{% endif %}
+            {% if not recipe_list and view == "my_recipe_list" %}
+                <p>
+                    You have no recipes. Why not <a href="{% url 'create_recipe' %}">create one?</a>
+                </p>
+            {% endif %}
+        {% endif %}
+        <div class="recipe-grid">
+            {% for recipe in recipe_list %}
+                <div class="recipe-item">
+                    <div class="img-container">
+                        <a href="{% url 'show_recipe' recipe.id %}">
+                            <img class="thumbnail"
+                                 src="{{ recipe.thumbnail.url }}"
+                                 alt="A Picture of {{ recipe.title }}" />
+                        </a>
+                    </div>
+                    <div class="recipe-item-lower">
+                        <a href="{% url 'show_recipe' recipe.id %}">
+                            <h3 class="recipe-item-heading">{{ recipe.title }}</h3>
+                        </a>
+                        <p>
+                            {% if recipe.description|length < 150 %}
+                                {{ recipe.description }}
+                            {% else %}
+                                {{ recipe.description|truncatechars:150 }}         {% endif %}
+                                <a href="{% url 'show_recipe' recipe.id %}"class ="read-more">Read more.</a>
+                            </p>
+                            <div class ="author">
+                                By
+                                {% if recipe.author %}
+                                    <a href="{% url 'recipes_by_author' recipe.author.id %}">
+                                        {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                                    </a>
+                                {% else %}
+                                    Anonymous
+                                {% endif %}
+                            </div>
+                            {% include 'recipes/rating.html' %}
+                        </div>
+                    </div>
+                    {% include 'recipes/stars.html' %}
+                {% endfor %}
+            </div>
+            {% include 'pagination.html' %}
+        </main>
+    {% endblock content %}
+    {% block scripts %}
+    {% endblock scripts %}

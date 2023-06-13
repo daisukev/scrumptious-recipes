@@ -1,71 +1,78 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock title %}</title>
-  <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
-  <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
-  <link rel="mask-icon" href="{% static 'favicon/safari-pinned-tab.svg' %}" color="#cf4147">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#CF4147">
-</head>
-
-<body>
-    <header>
-      <div class="user-links">
-        <ul>
-            {% if user.is_authenticated %}
-            <li class='nav-item'>
-            <a href="{% url 'my_recipe_list' %}">{{user.first_name}} {{user.last_name}}'s Recipes</a>
-              </li>
-            <li class='nav-item'>
-              <a href="{% url 'user_logout' %}"> Logout </a>
-              </li>
-            {% else %}
-            <li class='nav-item'>
-            <a href="{% url 'user_login' %}">Login</a>
-              </li>
-            <li class='nav-item'>
-              <a href="{% url 'signup' %}">Sign up</a>
-              </li>
-              
-            {% endif %}
-        </ul>
-      </div>
-      <div class="header-content">
-
-        <a href="{% url 'recipe_list' %}">
-        <h1 class="banner-text">Scrumptious Recipes</h1></a>
-      <nav>
-        <ul>
-          <li>
-            <a class='nav-item' href="{% url 'recipe_list' %}">Main page</a>
-          </li>
-          <li>
-            <a class='nav-item' href="{% url 'create_recipe' %}">Create a Recipe</a>
-          </li>
-        </ul>
-      </nav>
-      </div>
-    </header>
-    <div class="content">
-      {% block content %}{% endblock content %}
-      <div id="message-div"></div>
-    </div>
-    <footer>
-      <div class="footer-content">
-        Made with love by Scrumptious Recipes
-      </div>
-    </footer>
-  {% block scripts %}
-
-  {% endblock scripts %}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+        <link rel="stylesheet" href="{% static 'css/recipes.css' %}">
+        <link rel="apple-touch-icon"
+              sizes="180x180"
+              href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+        <link rel="mask-icon"
+              href="{% static 'favicon/safari-pinned-tab.svg' %}"
+              color="#cf4147">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#CF4147">
+    </head>
+    <body>
+        <header>
+            <div class="user-links">
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li class='nav-item'>
+                            <a href="{% url 'my_recipe_list' %}">{{ user.first_name }} {{ user.last_name }}'s Recipes</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a href="{% url 'user_logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class='nav-item'>
+                            <a href="{% url 'user_login' %}">Login</a>
+                        </li>
+                        <li class='nav-item'>
+                            <a href="{% url 'signup' %}">Sign up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="header-content">
+                <a href="{% url 'recipe_list' %}">
+                    <h1 class="banner-text">Scrumptious Recipes</h1>
+                </a>
+                <nav>
+                    <ul>
+                        <li>
+                            <a class='nav-item' href="{% url 'recipe_list' %}">Main page</a>
+                        </li>
+                        <li>
+                            <a class='nav-item' href="{% url 'create_recipe' %}">Create a Recipe</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div class="content">
+            {% block content %}
+            {% endblock content %}
+            <div id="message-div"></div>
+        </div>
+        <footer>
+            <div class="footer-content">Made with love by Scrumptious Recipes</div>
+        </footer>
+        {% block scripts %}
+        {% endblock scripts %}
+    </body>
 </html>

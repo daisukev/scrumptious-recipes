@@ -1,48 +1,41 @@
-{% extends 'base.html' %} {% block title %} Scrumptious Recipes - Create Recipe
-{% endblock title %} {% block content %}
-<main class="content-container">
-  <form enctype="multipart/form-data" method="post">
-    {% csrf_token %}
-    <label for="{{form.title.id_for_label}}">Title</label>
-    {{form.title}}
-    <label for="{{form.picture.id_for_label}}">Picture</label>
-    <img id="img-upload" style="width: min(300px, 100%)" />
-    {{form.picture}}
-    <label for="{{form.description.id_for_label}}">Description</label>
-    {{form.description}}
-    <h3>Add Ingredients</h3>
-    {{ ingredients.management_form }}
-    <div class="ingredients-formset">
-      {% for form in ingredients %}
-      <div class="ingredients-form">{{ form}}</div>
-      {% endfor %}
-    </div>
-    <!-- Hidden Block to Store Empty Form HTML -->
-    <div id="ingredients-empty-form" style="display: none">
-      {{ ingredients.empty_form}}
-    </div>
-    <button id="add-ingredients" type="button">Add Ingredient</button>
-
-    <h3>Add Instructions</h3>
-    {{ recipe_steps.management_form}}
-    <div class="recipe_steps-formset">
-      {% for form in recipe_steps %}
-      <div class="recipe_steps-form">{{ form }}</div>
-      {% endfor %}
-    </div>
-    <div id="recipe_steps-empty-form" style="display: none">
-      {{ recipe_steps.empty_form }}
-    </div>
-    <button id="add-recipe_steps" type="button">Add Step</button>
-
-    <div>
-      <button>Save</button>
-    </div>
-  </form>
-</main>
-{% endblock content %} {% block scripts %}
-
-<script>
+{% extends 'base.html' %}
+{% block title %}
+    Scrumptious Recipes - Create Recipe
+{% endblock title %}
+{% block content %}
+    <main class="content-container">
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <label for="{{ form.title.id_for_label }}">Title</label>
+            {{ form.title }}
+            <label for="{{ form.picture.id_for_label }}">Picture</label>
+            <img id="img-upload" style="width: min(300px, 100%)" />
+            {{ form.picture }}
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            <h3>Add Ingredients</h3>
+            {{ ingredients.management_form }}
+            <div class="ingredients-formset">
+                {% for form in ingredients %}<div class="ingredients-form">{{ form }}</div>{% endfor %}
+            </div>
+            <!-- Hidden Block to Store Empty Form HTML -->
+            <div id="ingredients-empty-form" style="display: none">{{ ingredients.empty_form }}</div>
+            <button id="add-ingredients" type="button">Add Ingredient</button>
+            <h3>Add Instructions</h3>
+            {{ recipe_steps.management_form }}
+            <div class="recipe_steps-formset">
+                {% for form in recipe_steps %}<div class="recipe_steps-form">{{ form }}</div>{% endfor %}
+            </div>
+            <div id="recipe_steps-empty-form" style="display: none">{{ recipe_steps.empty_form }}</div>
+            <button id="add-recipe_steps" type="button">Add Step</button>
+            <div>
+                <button>Save</button>
+            </div>
+        </form>
+    </main>
+{% endblock content %}
+{% block scripts %}
+    <script>
   document.getElementById("id_picture").onchange = function () {
     let src = URL.createObjectURL(this.files[0]);
     document.getElementById("img-upload").src = src;
@@ -166,5 +159,5 @@
   }
   ingredientsFormManager = formsetManager("ingredients");
   recipeStepsManager = formsetManager("recipe_steps");
-</script>
+    </script>
 {% endblock scripts %}

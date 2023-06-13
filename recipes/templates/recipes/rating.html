@@ -1,15 +1,14 @@
-<div class="stars-container" id="recipe-{{recipe.id}}">
+<div class="stars-container" id="recipe-{{ recipe.id }}">
     <span class="star" data-value=5>★</span>
     <span class="star" data-value=4>★</span>
     <span class="star" data-value=3>★</span>
     <span class="star" data-value=2>★</span>
     <span class="star" data-value=1>★</span>
-  </div>
-<div id="id-recipe-{{ recipe.id }}" class="rating">
-{% if recipe.average_rating is None %}
-  Not Rated Yet! 
-{% else %}
-  {{recipe.average_rating}} stars ({{recipe.num_ratings}} rating{{ recipe.num_ratings|pluralize:'s'}})
-{% endif %}
 </div>
-
+<div id="id-recipe-{{ recipe.id }}" class="rating">
+    {% if recipe.average_rating is None %}
+        Not Rated Yet!
+    {% else %}
+        {{ recipe.average_rating }} stars ({{ recipe.num_ratings }} rating{{ recipe.num_ratings|pluralize:'s' }})
+    {% endif %}
+</div>

@@ -1,95 +1,94 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tags + Templates Exercise</title>
-  <link rel="stylesheet" href="{% static "css/recipes.css" %}">
-</head>
-<body>
-  <header>
-    <nav>
-      <!-- 🐻 Bonus: Use the "url" tag to link this page to the last one. -->
-      <!-- More detailed instructions are available in the Bonus section of Exercise 2. -->
-      <a href="">Previous exercise</a> 
-    </nav>
-  </header>
-  <main>
-
-    
-    <!-- Challenge 1: Tags and Templates Together -->
-    <!-- Take a look at the third context dictionary in the show_exercise view function. -->
-    <!-- The dictionaries nested in the employees list contain various information about employees  -->
-    <!-- that need to be listed in a table. Use your knowledge of Django tags and template filters to do the following: -->
-    <!-- 1. List each employee -->
-    <!-- 2. Provide a default value of "N/A" if either first or last name is empty -->
-    <!--  -->
-    <!-- 3. Format their created_on date in this manner: 3-letter day 2-digit date 3-letter month 4-digit year 24-hour hour : minutes -->
-    <!-- ex. Mon 15 Jan 2030 15:35 -->
-    <!-- 4. Print each role inside an unordered list, printing "None" if the list is empty -->
-      <!-- Hint: You can nest "for" tags -->
-      <!-- Hint: Look into the "for...empty" tag -->
-    <!-- Use the static table below as a starting point -->
-    <table>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Start Date</th>
-        <th>Role(s)</th>
-      </tr>
-      <tr>
-        <td>George</td>
-        <td>Sanderson</td>
-        <td>1/1/22</td>
-        <td>Scarer</td>
-      </tr>
-    </table>
-  
-    <!-- Bonus Challenge: Template Inheritance -->
-    <!-- Template inheritance enables us to save ourselves a lot of work when making numerous similar pages. -->
-    <!-- By specifying a base template that contains "block" tags which establish content blocks, we can then -->
-    <!-- override the content blocks of the base template and fill the blocks with whatever content we want. -->
-    <!-- Read the documentation on template inheritance here: https://docs.djangoproject.com/en/4.2/ref/templates/language/#template-inheritance -->
-    <!-- and then open up base.html. Notice that it has several blocks defined and is overall the same structure as all three exercise templates. -->
-    <!-- Use template inheritance to reduce the size of this exercise file, and then do the same for the other two exercises if you have time. -->
-    
-  </main>
-  <footer>
-    Exercise 3
-  </footer>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tags + Templates Exercise</title>
+        <link rel="stylesheet" href="{% static "css/recipes.css" %}">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <!-- 🐻 Bonus: Use the "url" tag to link this page to the last one. -->
+                <!-- More detailed instructions are available in the Bonus section of Exercise 2. -->
+                <a href="">Previous exercise</a>
+            </nav>
+        </header>
+        <main>
+            <!-- Challenge 1: Tags and Templates Together -->
+            <!-- Take a look at the third context dictionary in the show_exercise view function. -->
+            <!-- The dictionaries nested in the employees list contain various information about employees  -->
+            <!-- that need to be listed in a table. Use your knowledge of Django tags and template filters to do the following: -->
+            <!-- 1. List each employee -->
+            <!-- 2. Provide a default value of "N/A" if either first or last name is empty -->
+            <!--  -->
+            <!-- 3. Format their created_on date in this manner: 3-letter day 2-digit date 3-letter month 4-digit year 24-hour hour : minutes -->
+            <!-- ex. Mon 15 Jan 2030 15:35 -->
+            <!-- 4. Print each role inside an unordered list, printing "None" if the list is empty -->
+            <!-- Hint: You can nest "for" tags -->
+            <!-- Hint: Look into the "for...empty" tag -->
+            <!-- Use the static table below as a starting point -->
+            <table>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Start Date</th>
+                    <th>Role(s)</th>
+                </tr>
+                <tr>
+                    <td>George</td>
+                    <td>Sanderson</td>
+                    <td>1/1/22</td>
+                    <td>Scarer</td>
+                </tr>
+            </table>
+            <!-- Bonus Challenge: Template Inheritance -->
+            <!-- Template inheritance enables us to save ourselves a lot of work when making numerous similar pages. -->
+            <!-- By specifying a base template that contains "block" tags which establish content blocks, we can then -->
+            <!-- override the content blocks of the base template and fill the blocks with whatever content we want. -->
+            <!-- Read the documentation on template inheritance here: https://docs.djangoproject.com/en/4.2/ref/templates/language/#template-inheritance -->
+            <!-- and then open up base.html. Notice that it has several blocks defined and is overall the same structure as all three exercise templates. -->
+            <!-- Use template inheritance to reduce the size of this exercise file, and then do the same for the other two exercises if you have time. -->
+        </main>
+        <footer>
+            Exercise 3
+        </footer>
+    </body>
 </html>
 exercises/base.html
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %} Django Tag and Template Filter Exercises {% endblock title %}</title>
-  <link rel="stylesheet" href="{% static "css/recipes.css" %}">
-</head>
-<body>
-  <header>
-    {% block nav %}
-    <nav>
-      <a href="">Next exercise</a> 
-      <a href="">Previous exercise</a> 
-    </nav>
-    {% endblock nav %}
-  </header>
-  <main>
-    {% block content %}{% endblock content %}
-  </main>
-  <footer>
-    {% block footer %}
-    Django Tag and Template Filter Exercises
-    {% endblock footer %}
-  </footer>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}
+                Django Tag and Template Filter Exercises
+            {% endblock title %}
+        </title>
+        <link rel="stylesheet" href="{% static "css/recipes.css" %}">
+    </head>
+    <body>
+        <header>
+            {% block nav %}
+                <nav>
+                    <a href="">Next exercise</a>
+                    <a href="">Previous exercise</a>
+                </nav>
+            {% endblock nav %}
+        </header>
+        <main>
+            {% block content %}
+            {% endblock content %}
+        </main>
+        <footer>
+            {% block footer %}
+                Django Tag and Template Filter Exercises
+            {% endblock footer %}
+        </footer>
+    </body>
 </html>

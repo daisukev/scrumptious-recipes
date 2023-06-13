@@ -31,7 +31,7 @@ def show_recipe(request, id):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    paginator = Paginator(recipes, 9)
+    paginator = Paginator(recipes, 9, orphans=3)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     page_range = paginator.get_elided_page_range(number=page_number)
@@ -45,8 +45,8 @@ def recipe_list(request):
 @login_required
 def my_recipe_list(request):
     recipes = Recipe.objects.filter(author= request.user)
-    paginator = Paginator(recipes, 9)
-    page_number = request.GET.get("page")
+    paginator = Paginator(recipes, 9, orphans=3)
+    page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     page_range = paginator.get_elided_page_range(number=page_number)
     context = {
@@ -58,7 +58,7 @@ def my_recipe_list(request):
 
 def recipes_by_author(request, author_id):
     recipes = Recipe.objects.filter(author=author_id)
-    paginator = Paginator(recipes, 9)
+    paginator = Paginator(recipes, 9, orphans=3)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     page_range = paginator.get_elided_page_range(number=page_number)
