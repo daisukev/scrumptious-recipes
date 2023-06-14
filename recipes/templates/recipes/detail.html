@@ -7,7 +7,6 @@
     <div class="recipe-detail">
         <div class="recipe-header">
             <h2>{{ recipe.title }}</h2>
-            <p class="description">{{ recipe.description }}</p>
             <p>
                 by
                 {% if recipe.author %}
@@ -19,6 +18,7 @@
                 {% endif %}
                 on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
             </p>
+            <p class="description">{{ recipe.description }}</p>
             <div class="main-picture-container"></div>
             <img src="{{ recipe.picture.url }}"
                  class="main-picture"
