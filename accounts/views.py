@@ -58,4 +58,5 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('recipe_list')
+    # TODO: Redirect back to previous page instead.
+    return redirect(request.GET.get('next','/'))

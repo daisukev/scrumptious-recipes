@@ -9,7 +9,7 @@
             <label for="{{ form.title.id_for_label }}">Title</label>
             {{ form.title }}
             <label for="{{ form.picture.id_for_label }}">Picture</label>
-            <img id="img-upload" style="width: min(300px, 100%)" />
+    <img id="img-upload" style="width: min(300px, 100%)" src="{{ recipe_object.picture }}">
             {{ form.picture }}
             <label for="{{ form.description.id_for_label }}">Description</label>
             {{ form.description }}
