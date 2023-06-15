@@ -5,8 +5,9 @@ Login! - Scrumptious Recipes
 {% endblock title %}
 
 {% block content %}
-<main>
+<main class="content-container">
 
+  <div class="login">
 <h1>Login!</h1>
 <form method="post">
   {% csrf_token %}
@@ -14,6 +15,7 @@ Login! - Scrumptious Recipes
   <button>Submit</button>
 
 </form>
+  </div>
 </main>
 {% endblock content %}
 

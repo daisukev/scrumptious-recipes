@@ -19,13 +19,14 @@
                 on <time> {{ recipe.created_on|date:"F j, Y" }} </time>
             </p>
             <p class="description">{{ recipe.description }}</p>
-            <div class="main-picture-container"></div>
+            <div class="main-picture-container">
             <img src="{{ recipe.picture.url }}"
                  class="main-picture"
                  alt="A picture of {{ recipe.title }}">
+            </div>
         </div>
         <div class="recipe-content">
-            <div>
+
               <div class="rating-container">
                 <h3> Rating</h3>
                 {% include 'recipes/rating.html' %}
@@ -47,7 +48,8 @@
                 {% endfor %}
               </div>
               </div>
-            </div>
+            
+            <div></div>
             {% if user == recipe.author %}
                 {% comment %}
     TODO: maybe style these?
