@@ -446,7 +446,7 @@ label[for="id_picture"]
 }
 label[for="id_picture"]::after
 {
-  content: " 📁"
+  /* content: " 📁" */
 }
 label{
   margin-block: 1rem;
@@ -732,6 +732,17 @@ button.toggle-button[aria-expanded="true"]{
 }
 .rating-histogram-rating{
   font-size:0.9rem;
+}
+
+.upload-svg{
+  fill: var(--dark-green-color);
+  transition: transform 80ms ease-in;
+}
+.upload-svg:hover{
+  transform: scale(1.15);
+}
+.upload-svg:active{
+  transform: scale(1.05);
 }
 
 

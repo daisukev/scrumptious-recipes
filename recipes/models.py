@@ -104,7 +104,7 @@ class Recipe(models.Model):
 
         # file formats 
         thumb_img.save(thumb_data, format=thumb_img.format)   # save the thumbnail same filetype as the original
-        thumb_img.close() # close the image
+        # thumb_img.close() # close the image
         stripped_picture_path = os.path.basename(os.path.splitext(str(self.picture))[0])
 
         print(stripped_picture_path)
