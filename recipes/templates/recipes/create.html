@@ -8,7 +8,17 @@
             {% csrf_token %}
             <label for="{{ form.title.id_for_label }}">Title</label>
             {{ form.title }}
-            <label for="{{ form.picture.id_for_label }}">Picture</label>
+            <label for="{{ form.picture.id_for_label }}">Picture
+<svg width="25px" height="25px" 
+                  class = "upload-svg"
+  stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="Untitled">
+<path d="M621.7 365.8L621.7 439L841.2 439L841.2 804.7L182.9 804.7L182.9 439L402.3 439L402.3 365.8L109.7 365.8L109.7 877.8L914.3 877.8L914.3 365.8L621.7 365.8Z" " fill-rule="nonzero" opacity="1" stroke="none"/>
+<path d="M475.4 280.4L475.4 621.8L548.6 621.8L548.6 280.4L595.9 327.6L647.6 275.9L512 140.4L376.4 275.9L428.2 327.6L475.4 280.4Z" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</svg>
+            </label>
     <img id="img-upload" style="width: min(300px, 100%)" src="{{ recipe_object.picture }}">
             {{ form.picture }}
             <label for="{{ form.description.id_for_label }}">Description</label>
