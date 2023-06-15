@@ -303,24 +303,26 @@ nav ul li{
 }
 
 .star {
-  background: black;
+  background: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   transition: background 200ms;
   margin:0;
   padding:0;
-  /* filter: drop-shadow(1px 1px 3px rgb( 0 0 0 / 0.2)); */
+  -webkit-text-stroke: 2px var(--red-color);
+  user-select: none;
 }
+
 .gold {
-  background: gold;
+  background: var(--red-color);
   -webkit-background-clip: text;
   background-clip: text;
 }
 .partial-star{
   /* --star-percentage: ; */
-  /* background: linear-gradient(to right, gold var(--star-percentage), black calc(100% - var(--star-percentage))); */
-  background: linear-gradient(to right, gold var(--star-percentage), gold var(--star-percentage), black var(--star-percentage), black calc(100% - var(--star-percentage)));
+  /* background: linear-gradient(to right, var(--red-color) var(--star-percentage), black calc(100% - var(--star-percentage))); */
+  background: linear-gradient(to right, var(--red-color) var(--star-percentage), gold var(--star-percentage), transparent var(--star-percentage), transparent calc(100% - var(--star-percentage)));
 
   -webkit-background-clip: text;
   background-clip: text;
@@ -332,7 +334,7 @@ nav ul li{
 .star:hover ~ .star:not(:hover) {
 
   cursor: pointer;
-  background:gold;
+  background:var(--red-color);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -675,7 +677,7 @@ button:focus{
   padding-inline: 0.5rem;
 }
 .rating-histogram-star{
-  color: gold;
+  color: var(--red-color);
 }
 .rating-histogram-progress{
   --progress-radius: 5px;
@@ -844,3 +846,16 @@ button.toggle-button[aria-expanded="true"]{
 
 }
 
+ol{
+  padding-left: 70px;
+}
+ol li::marker{
+  font-size:3rem;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  color: var(--red-color);
+  padding: 1rem;
+}
+ol li{
+    min-height: 3rem;
+}
