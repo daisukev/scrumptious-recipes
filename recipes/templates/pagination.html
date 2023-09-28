@@ -1,27 +1,27 @@
 <div class="pagination-container">
-    <ul class="pagination">
-        {% if recipe_list.has_previous %}
-            <li>
-                <a href="?page={{ recipe_list.previous_page_number }}">&#x276E; Previous</a>
-            </li>
-        {% endif %}
-        {% for page in page_range %}
-            {% if page == recipe_list.paginator.ELLIPSIS %}
-                <li>...</li>
-            {% else %}
-                {% if page == recipe_list.number %}
-                    <li class="current-page">{{ page }}</li>
-                {% else %}
-                    <li>
-                        <a href="?page={{ page }}">{{ page }}</a>
-                    </li>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        {% if recipe_list.has_next %}
-            <li>
-                <a href="?page={{ recipe_list.next_page_number }}">Next &#x276F;</a>
-            </li>
-        {% endif %}
-    </ul>
+  <ul class="pagination">
+    {% if recipe_list.has_previous %}
+    <li>
+      <a href="?page={{ recipe_list.previous_page_number }}">&#x276E; Previous</a>
+    </li>
+    {% endif %}
+    {% for page in page_range %}
+    {% if page == recipe_list.paginator.ELLIPSIS %}
+    <li>...</li>
+    {% else %}
+    {% if page == recipe_list.number %}
+    <li class="current-page">{{ page }}</li>
+    {% else %}
+    <li>
+      <a href="?page={{ page }}">{{ page }}</a>
+    </li>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% if recipe_list.has_next %}
+    <li>
+      <a href="?page={{ recipe_list.next_page_number }}">Next &#x276F;</a>
+    </li>
+    {% endif %}
+  </ul>
 </div>

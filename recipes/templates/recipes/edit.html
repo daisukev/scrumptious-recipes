@@ -1,6 +1,6 @@
 <h1>Edit {{ recipe_object.title }}</h1>
-<form enctype= "multipart/form-data" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>Save</button>
+<form enctype="multipart/form-data" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button>Save</button>
 </form>
